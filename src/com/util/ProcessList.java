@@ -24,10 +24,11 @@ public class ProcessList {
 		}
 	}
 	
-	/**public void show (){
+	public void show (){
 		ProcessNode node = first;
 		while (node != null){
-			System.out.println("Process: " + node.process.id );
+			System.out.println("Process: " + node.process.getPriority());
+			node = node.next;
 		}
-	}**/
+	}
 }

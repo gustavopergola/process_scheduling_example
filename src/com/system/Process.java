@@ -12,7 +12,8 @@ public class Process {
 		this.resources = new ArrayList<Resource>();	
 	}
 	
-	
-	
+	public int getPriority (){
+		return this.priority;
+	}
 	
 }
