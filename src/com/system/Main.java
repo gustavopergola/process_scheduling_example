@@ -1,4 +1,5 @@
 package com.system;
+import com.rowHandler.SubmissionRow;
 import com.util.ProcessList;
 public class Main {
 	public static void main(String[] args) {
@@ -12,13 +13,13 @@ public class Main {
 		Process process1 = new Process(1);
 		Process process2 = new Process(2);
 		
-		// Generate and add process to Process List
-		ProcessList processList = new ProcessList();
-		processList.insert(process1);
-		processList.insert(process2);
+		// Initialize quantum 2 process scheduler (manages rows)
+		Scheduling scheduler = new Scheduling();
 		
-		// Show process List
-		processList.show();
+		scheduler.submit(process1);
+		scheduler.submit(process2);
+		
+		System.out.println(scheduler.toString());
 		
 		System.out.println("Até logo!");
 		

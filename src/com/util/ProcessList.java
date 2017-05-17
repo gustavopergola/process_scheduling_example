@@ -2,6 +2,7 @@ package com.util;
 import com.system.Process;
 public class ProcessList {
 	private ProcessNode first;
+	
 	public ProcessList(){}
 
 	public ProcessNode insert (Process process){
@@ -30,5 +31,28 @@ public class ProcessList {
 			System.out.println("Process: " + node.process.getPriority());
 			node = node.next;
 		}
+	}
+	
+	public ProcessNode getFirst (){
+		return first;
+	}
+	
+	public Process getFirstProcess (){
+		if (first != null) return first.process;
+		return null;
+	}
+	
+	public Process pop(){
+		if (first == null) return null;
+		
+		Process process = first.process;
+		if (first.next == null)
+			first = null;
+		else 
+			first = first.next;
+		
+		return process;
+		
+		
 	}
 }

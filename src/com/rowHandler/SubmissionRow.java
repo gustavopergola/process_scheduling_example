@@ -1,5 +1,7 @@
 package com.rowHandler;
 
+import com.system.Process;
+
 public class SubmissionRow extends Row {
 
 	private RealTimeRow rtr;
@@ -11,10 +13,25 @@ public class SubmissionRow extends Row {
 		ur = new UserRow();
 	}
 	
-	public void submit (Process process){
-		
+	// admits n processes on the submission row
+	public void admit (int n){
+		for (int i = 0; i < n; i ++)
+			if (admit())
+				break;
 	}
 	
+	// admits next process on the submission row (FCFS)
+	public boolean admit (){
+		Process process = super.list.pop();
+		if (process == null) return false;
+		else {
+			if (process.getPriority() == 0){
+				rtr.submit(process);
+			}else
+				ur.submit(process);
+			return true;
+		}
+	}
 	
 
 }
