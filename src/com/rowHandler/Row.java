@@ -27,7 +27,7 @@ public class Row {
 		 String answer = "\t ";
 		 ProcessNode node = list.getFirst();
 		 while (node != null){
-			 if (node.process != null) answer += " P" + node.process.getPriority();
+			 if (node.process != null) answer += " P" + node.process.getId();
 			 node = node.next;
 		 }
 		 answer += " // END ROW";

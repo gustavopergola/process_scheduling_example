@@ -21,6 +21,7 @@ public class Scheduling {
 		}	
 
 		public void submit (Process process){
+			process.setId(++lastId);
 			sr.submit(process);
 		}
 		
@@ -35,4 +36,5 @@ public class Scheduling {
 			return answer;
 		}
 
+		
 }
