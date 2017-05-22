@@ -13,7 +13,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import com.util.ProcessList;
 
-public class Main extends Application implements EventHandler<ActionEvent> {
+public class Main extends Application  {
 	
 	Button button;
 	
@@ -45,8 +45,18 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("Titulo");
 		
-		Button button = new Button();
+		button = new Button();
 		button.setText("Click me");
+		
+		// isso
+		button.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle (ActionEvent event){
+				System.out.println("Ola");
+			}
+		});
+		
+		// é o mesmo que isso
+		button.setOnAction(e -> System.out.println("Ola"));
 		
 		StackPane layout = new StackPane();
 		layout.getChildren().add(button);
@@ -58,12 +68,6 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 		
 	}
 
-	@Override
-	public void handle(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	
 	private static boolean readFile(Scheduler scheduler){
 		// Lets consider a perfect file: if it exists, there's no syntax error or whatsoever
