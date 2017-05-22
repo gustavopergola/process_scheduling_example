@@ -3,9 +3,11 @@ package com.system;
 import java.util.ArrayList;
 
 public class Process {
+	private int size = 0; // Mbytes
+	private int time = 0;
 	private int arrivalTime = 0;
 	private int priority = 2;
-	private ArrayList<Resource> resources; //<# impressoras>, <# scanners>, <# modems>, <# CDs>
+	private ArrayList<Resource> resources; //<# printers >, <# scanners>, <# modems>, <# CDs>
 	public int id = 0; 
 		
 	public Process(){
@@ -50,6 +52,27 @@ public class Process {
 		}else{
 			// else is a CD driver
 		}
+	}
+
+	public void setPriority(int priority) {
+		this.priority = priority;
+		
+	}
+
+	public int getTime() {
+		return time;
+	}
+
+	public void setTime(int time) {
+		this.time = time;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
 	}
 	
 }
