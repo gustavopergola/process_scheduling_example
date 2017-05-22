@@ -7,16 +7,16 @@ import com.rowHandler.SubmissionRow;
 import com.rowHandler.UserRow;
 import com.util.ProcessList;
 
-public class Scheduling {
+public class Scheduler {
 		private int lastId = 0;
 		private int quantum = 2;
 		private RealTimeRow rtr = new RealTimeRow();
 		private UserRow ur = new UserRow();
 		private SubmissionRow sr = new SubmissionRow();
 		
-		public Scheduling (){}
+		public Scheduler (){}
 		
-		public Scheduling (int quantum){
+		public Scheduler (int quantum){
 			this.quantum = quantum;	
 		}	
 

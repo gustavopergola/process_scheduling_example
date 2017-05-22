@@ -3,13 +3,13 @@ package com.system;
 import java.util.ArrayList;
 
 public class Process {
-	private int priority;
-	private ArrayList<Resource> resources;
+	private int arrivalTime = 0;
+	private int priority = 2;
+	private ArrayList<Resource> resources; //<# impressoras>, <# scanners>, <# modems>, <# CDs>
 	public int id = 0; 
 		
-	public Process(int priority){
-		this.priority = priority;
-		this.resources = new ArrayList<Resource>();	
+	public Process(){
+		resources = new ArrayList<Resource>();	
 	}
 	
 	public int getPriority (){
@@ -26,6 +26,30 @@ public class Process {
 	
 	public int getId(){
 		return this.id;
+	}
+
+	public int getArrivalTime() {
+		return arrivalTime;
+	}
+
+	public void setArrivalTime(int arrivalTime) {
+		this.arrivalTime = arrivalTime;
+	}
+
+	public ArrayList<Resource> getResources() {
+		return resources;
+	}
+
+	public void setResources(Resource resource) {
+		if (resource.getName().equals("Printer")){
+			
+		}else if(resource.getName().equals("Scanner")){
+			
+		}else if(resource.getName().equals("Modem")){
+			
+		}else{
+			// else is a CD driver
+		}
 	}
 	
 }
