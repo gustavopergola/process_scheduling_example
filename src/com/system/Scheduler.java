@@ -1,19 +1,18 @@
 package com.system;
 
-import java.util.ArrayList;
-
 import com.rowHandler.RealTimeRow;
 import com.rowHandler.Row;
 import com.rowHandler.SubmissionRow;
 import com.rowHandler.UserRow;
-import com.util.ProcessList;
+import com.util.MemoryList;
 
 public class Scheduler {
 		private int lastId = 0;
 		private int quantum = 2;
 		private RealTimeRow rtr = new RealTimeRow();
 		private UserRow ur = new UserRow();
-		private SubmissionRow sr = new SubmissionRow();
+		private SubmissionRow sr = new SubmissionRow(this);
+		private MemoryList memory = new MemoryList ();
 		
 		public Scheduler (){}
 		
@@ -47,6 +46,19 @@ public class Scheduler {
 		
 		public Row getUserRow (){
 			return this.ur;
+		}
+		
+		public void checkMemorySpace (Process process){
+			
+			// if there's no memory space, we should swap out some processes
+			if (memory.checkSizeAvailability(process.getSize()) == null){
+				swapOut();
+			}
+				
+		}
+
+		private void swapOut() {
+			memory.removeProcess(ur.LRU());
 		}
 
 

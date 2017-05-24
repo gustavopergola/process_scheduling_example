@@ -1,16 +1,19 @@
-package com.rowHandler;
+ package com.rowHandler;
 
 import com.system.Process;
+import com.system.Scheduler;
 
 public class SubmissionRow extends Row {
 
 	private RealTimeRow rtr;
 	private UserRow ur;
+	private Scheduler scheduler;
 	
-	public SubmissionRow() {
+	public SubmissionRow(Scheduler scheduler) {
 		super();
 		rtr = new RealTimeRow();
 		ur = new UserRow();
+		this.scheduler = scheduler; 
 	}
 	
 	// admits n processes on the submission row
@@ -25,6 +28,9 @@ public class SubmissionRow extends Row {
 		Process process = super.list.pop();
 		if (process == null) return false;
 		else {
+			// checks if there's enough memory space for the new process, swap out if needed
+			this.scheduler.checkMemorySpace(process);
+			
 			if (process.getPriority() == 0){
 				rtr.submit(process);
 			}else
@@ -33,5 +39,4 @@ public class SubmissionRow extends Row {
 		}
 	}
 	
-
 }

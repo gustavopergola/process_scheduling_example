@@ -17,6 +17,7 @@ public class Main extends Application  {
 	
 	public static void main(String[] args) {
 
+		
 		launch(args);
 		
 	}
@@ -72,7 +73,7 @@ public class Main extends Application  {
 				Process newProcess = new Process();
 				String line = sc.nextLine();
 				String [] infos = new String [8];
-				infos = line.split(" ");
+				infos = line.split(", ");
 				
 				for (int i = 0; i < infos.length; i++){
 					if (i==0){
@@ -85,7 +86,7 @@ public class Main extends Application  {
 					}
 					else if(i==2){
 						// check for processor time
-						newProcess.setTime(Integer.parseInt(infos[i]));
+						newProcess.setTimeLeft(Integer.parseInt(infos[i]));
 					}
 					else if(i==3){
 						// check for size in MBytes
