@@ -3,16 +3,17 @@ package com.system;
 import java.util.ArrayList;
 
 public class Processor {	
-	private ArrayList<Core> cores;
+	private ArrayList<CPU> cores;
 
 	public Processor (int cores){
-		this.cores = new ArrayList <Core>();
-		for (int i = 0; i < cores; i++)
-			this.cores.add(new Core());
+		this.cores = new ArrayList <CPU>();
+		for (int i = 0; i < cores; i++){
+			this.cores.add(new CPU());
+		}
 	}
 
-	public Core execute (Process process){
-		Core emptyCore = checkEmpty();
+	public CPU execute (Process process){
+		CPU emptyCore = checkEmpty();
 		if (emptyCore != null){
 			emptyCore.execute(process);
 			return emptyCore; 	
@@ -23,7 +24,7 @@ public class Processor {
 	/// return first empty core pointer (some cores may be 
 	/// executing a high priority task
 	/// returns null in case none were found
-	private Core checkEmpty (){
+	private CPU checkEmpty (){
 		for (int i = 0; i < this.cores.size(); i++)
 			if(this.cores.get(i).empty())
 				return this.cores.get(i);

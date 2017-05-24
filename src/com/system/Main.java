@@ -11,18 +11,21 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class Main extends Application  {
+public class Main   {
 	
 	Scene scene1, scene2;
 	
 	public static void main(String[] args) {
 
+		//launch(args);
+		Scheduler scheduler = new Scheduler ();
+		readFile(new File ("file.txt"), scheduler);
 		
-		launch(args);
+		CPU core1 = new CPU(scheduler);
+		core1.run();
 		
 	}
 
-	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
 		Scheduler scheduler = new Scheduler ();
@@ -124,7 +127,8 @@ public class Main extends Application  {
 		}
 	}
 	
-	// TODO	Alocação de memória apropriada
+	// TODO	Alocação de memória apropriada (finished process isn't being seen on LRU)
+	// TODO suspended processes
 	// TODO Manipulação de processos em paralelo usando threads
 	// TODO Planejamento geral do escalonador de feedback FCFS
 	// TODO Tratamento de recursos

@@ -1,20 +1,30 @@
 package com.system;
 
+import java.util.ArrayList;
+
 import com.rowHandler.RealTimeRow;
 import com.rowHandler.Row;
 import com.rowHandler.SubmissionRow;
 import com.rowHandler.UserRow;
 import com.util.MemoryList;
 
-public class Scheduler {
+public class Scheduler implements Runnable{
 		private int lastId = 0;
 		private int quantum = 2;
 		private RealTimeRow rtr = new RealTimeRow();
 		private UserRow ur = new UserRow();
 		private SubmissionRow sr = new SubmissionRow(this);
 		private MemoryList memory = new MemoryList ();
+		private int admitDelay = 4;
 		
-		public Scheduler (){}
+		private ArrayList <Row> feedbackQueue = new ArrayList<Row>(3);
+		private Row fcfsQueue = new Row();
+		
+		public Scheduler (){
+			feedbackQueue.add(new Row()); // feedback row 1
+			feedbackQueue.add(new Row()); // feedback row 2
+			feedbackQueue.add(new Row()); // feedback row 3
+		}
 		
 		public Scheduler (int quantum){
 			this.quantum = quantum;	
@@ -23,6 +33,14 @@ public class Scheduler {
 		public void submit (Process process){
 			process.setId(++lastId);
 			sr.submit(process);
+		}
+		
+		private void admitAll(){
+			while (rtr.getList().getFirst() != null)
+				fcfsQueue.submit(rtr.getList().pop());
+			while (ur.getList().getFirst() != null){
+				feedbackQueue.get(0).submit(rtr.getList().pop()); // admits process to first row of the feedback queue
+			}		
 		}
 		
 		public String toString(){
@@ -60,7 +78,22 @@ public class Scheduler {
 		private void swapOut() {
 			memory.removeProcess(ur.LRU());
 		}
+		
+		public Process request(){
+			// TODO: Make it a feedback politic with FCFS for priority 0 processes
+			if ()
+		}
 
+		public int getQuantum() {
+			// TODO Auto-generated method stub
+			return this.quantum;
+		}
+
+		@Override
+		public void run() {
+			sr.defineRows(); // this will allocate memory
+			this.admitAll(); // admits processes
+		}
 
 		
 }

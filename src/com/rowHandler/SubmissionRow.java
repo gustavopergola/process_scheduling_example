@@ -16,27 +16,24 @@ public class SubmissionRow extends Row {
 		this.scheduler = scheduler; 
 	}
 	
-	// admits n processes on the submission row
-	public void admit (int n){
-		for (int i = 0; i < n; i ++)
-			if (admit())
-				break;
-	}
-	
 	// admits next process on the submission row (FCFS)
-	public boolean admit (){
-		Process process = super.list.pop();
-		if (process == null) return false;
-		else {
-			// checks if there's enough memory space for the new process, swap out if needed
-			this.scheduler.checkMemorySpace(process);
-			
-			if (process.getPriority() == 0){
-				rtr.submit(process);
-			}else
-				ur.submit(process);
-			return true;
+	public void defineRows (){
+		if (super.list.getFirst() == null){
+			return;
 		}
+		Process process = super.list.pop();
+	
+		// checks if there's enough memory space for the new process, swap out if needed
+		this.scheduler.checkMemorySpace(process);
+		
+		if (process.getPriority() == 0){
+			rtr.submit(process);
+		}else{
+			ur.submit(process);
+		}
+		
+		defineRows();
+	
 	}
 	
 }

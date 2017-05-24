@@ -115,4 +115,8 @@ public class Process {
 		this.size = size;
 	}
 	
+	public String toString(){
+		return "P" + this.id;
+	}
+	
 }
