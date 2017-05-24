@@ -1,78 +1,71 @@
 package com.system;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import com.rowHandler.SubmissionRow;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import com.util.ProcessList;
 
 public class Main extends Application  {
 	
-	Button button;
+	Scene scene1, scene2;
 	
 	public static void main(String[] args) {
 
 		launch(args);
 		
-		System.out.println("Bem-vindo!");
-		
-		// Initialize quantum 2 process scheduler (manages rows)
-		Scheduler scheduler = new Scheduler();
-		
-		if (readFile(scheduler)){
-			// Declare quad-core processor
-			Processor processor = new Processor(4);
-			System.out.println(scheduler.toString());
-			
-			System.out.println("Até logo!");
-			
-		}else {
-			System.out.println("File could not be found! Aborting!");
-		}
-		
-		
-		
 	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		primaryStage.setTitle("Titulo");
 		
-		button = new Button();
-		button.setText("Click me");
+		Scheduler scheduler = new Scheduler ();
 		
-		// isso
-		button.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle (ActionEvent event){
-				System.out.println("Ola");
+		primaryStage.setTitle("Scheduler");
+		
+		
+		// First Scene
+		Label label1 = new Label("Select your process file");
+		Button button1 = new Button();
+		button1.setText("Select TXT File");
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Open TXT File");
+		
+		VBox layout1 = new VBox(20);
+		layout1.getChildren().addAll(label1, button1);
+		layout1.setAlignment(Pos.CENTER);
+		
+		button1.setOnAction(e -> {
+			if (readFile(fileChooser.showOpenDialog(primaryStage), scheduler)){
+				
+				// Display rows
+				RowWindow.display(scheduler);
+				
+				
+			}else {
+				
+				// Show error message in case there is smth wrong with the file
+				Label labelError = new Label ("Impossible to read from this file!");	
+				layout1.getChildren().add(labelError);
+				
 			}
-		});
+			System.out.println(scheduler.toString());
+		});	
 		
-		// é o mesmo que isso
-		button.setOnAction(e -> System.out.println("Ola"));
-		
-		StackPane layout = new StackPane();
-		layout.getChildren().add(button);
-		
-		Scene scene = new Scene(layout, 300, 250);
-		
-		primaryStage.setScene(scene);
+		scene1 = new Scene(layout1, 300, 250);
+	
+		primaryStage.setScene(scene1);
 		primaryStage.show();
 		
 	}
 
-	
-	private static boolean readFile(Scheduler scheduler){
+	private static boolean readFile(File file, Scheduler scheduler){
 		// Lets consider a perfect file: if it exists, there's no syntax error or whatsoever
-		
-		File file = new File("file.txt");
 		try {
 			Scanner sc = new Scanner(file);
 			while (sc.hasNextLine()){
@@ -123,16 +116,14 @@ public class Main extends Application  {
 				scheduler.submit(newProcess);
 				
 			}
-			
+			sc.close();
 			return true;
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			return false;
 		}
 	}
 	
 	// TODO	Alocação de memória apropriada
-	// TODO Leitura do arquivo <arrival time>, <priority>, <processor time>, <Mbytes>, <# printers>, <# scanners>, <# modems>, <# CDs>
-	// TODO User Interface
 	// TODO Manipulação de processos em paralelo usando threads
 	// TODO Planejamento geral do escalonador de feedback FCFS
 	// TODO Tratamento de recursos

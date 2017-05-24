@@ -30,7 +30,6 @@ public class Row {
 			 if (node.process != null) answer += " P" + node.process.getId();
 			 node = node.next;
 		 }
-		 answer += " // END ROW";
 		 return answer;
 	}
 	

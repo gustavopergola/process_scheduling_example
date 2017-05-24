@@ -3,6 +3,7 @@ package com.system;
 import java.util.ArrayList;
 
 import com.rowHandler.RealTimeRow;
+import com.rowHandler.Row;
 import com.rowHandler.SubmissionRow;
 import com.rowHandler.UserRow;
 import com.util.ProcessList;
@@ -35,6 +36,19 @@ public class Scheduler {
 			answer += "Scheduler END \n";
 			return answer;
 		}
+		
+		public Row getSubmissionRow (){
+			return this.sr;
+		}
+		
+		public Row getRealTimeRow (){
+			return this.rtr;
+		}
+		
+		public Row getUserRow (){
+			return this.ur;
+		}
+
 
 		
 }
