@@ -7,7 +7,6 @@ public class ProcessList {
 
 	public ProcessNode insert (Process process){
 		ProcessNode node = new ProcessNode(process);
-		
 		if (first == null){	
 			first = node;
 			return node;
@@ -23,6 +22,23 @@ public class ProcessList {
 				return node;
 			}
 		}
+		
+	}
+	
+	public boolean remove(Process process){
+		ProcessNode aux = first;
+		ProcessNode ant = null;
+		while (aux != null){
+			if (aux.process.equals(process)){
+				// found the process
+				if (ant != null){
+					ant.next = aux.next;
+					return true;
+				}
+			}
+			aux = aux.next;
+		}
+		return false;
 	}
 	
 	public void show (){

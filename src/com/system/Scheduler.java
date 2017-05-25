@@ -13,7 +13,7 @@ public class Scheduler implements Runnable{
 		private int quantum = 2;
 		private RealTimeRow rtr = new RealTimeRow();
 		private UserRow ur = new UserRow();
-		private SubmissionRow sr = new SubmissionRow(this);
+		private SubmissionRow sr = new SubmissionRow(this, rtr, ur);
 		private MemoryList memory = new MemoryList ();
 		private int admitDelay = 4;
 		
@@ -39,7 +39,7 @@ public class Scheduler implements Runnable{
 			while (rtr.getList().getFirst() != null)
 				fcfsQueue.submit(rtr.getList().pop());
 			while (ur.getList().getFirst() != null){
-				feedbackQueue.get(0).submit(rtr.getList().pop()); // admits process to first row of the feedback queue
+				feedbackQueue.get(0).submit(ur.getList().pop()); // admits process to first row of the feedback queue
 			}		
 		}
 		
@@ -81,7 +81,25 @@ public class Scheduler implements Runnable{
 		
 		public Process request(){
 			// TODO: Make it a feedback politic with FCFS for priority 0 processes
-			if ()
+			Process process = fcfsQueue.getList().pop();
+			if (process != null) return process;
+			for (int i= 0; i < feedbackQueue.size(); i++ ){
+				process = feedbackQueue.get(i).getList().pop();
+				
+				if (i + 1 >= feedbackQueue.size()) feedbackQueue.get(0).submit(process); // caso seja a ultima fila
+				else feedbackQueue.get(i + 1).submit(process); // caso seja a primeira ou a segunda ou alguma no meio
+					
+				if (process != null) return process;
+			}
+			return null;
+		}
+		
+		public void endProcess(Process process){
+			// try rows individually
+			if (fcfsQueue.getList().remove(process)) return;
+			for (int i= 0; i < feedbackQueue.size(); i++ )
+				if (feedbackQueue.get(i).getList().remove(process)) return; 
+			
 		}
 
 		public int getQuantum() {
@@ -93,6 +111,7 @@ public class Scheduler implements Runnable{
 		public void run() {
 			sr.defineRows(); // this will allocate memory
 			this.admitAll(); // admits processes
+			
 		}
 
 		

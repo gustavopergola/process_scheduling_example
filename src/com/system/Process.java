@@ -10,6 +10,8 @@ public class Process {
 	private ArrayList<Resource> resources; //<# printers >, <# scanners>, <# modems>, <# CDs>
 	public int id = 0; 
 	public int lastTimeUsed = 0;
+	public boolean executing;
+	
 	
 	public Process(){
 		resources = new ArrayList<Resource>(5);	

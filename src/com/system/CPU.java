@@ -29,13 +29,12 @@ public class CPU implements Runnable {
 
 	@Override
 	public void run() {
+		boolean requested = false;
 		
-		if (executing == null){
-			// request another process
-			executing = this.scheduler.request();
-		}
+		if (executing == null) executing = this.scheduler.request(); // request another process
 		
 		if (executing != null){
+			executing.executing = true;
 			System.out.println(executing.toString());
 		}else {
 			System.out.println("Sem processo!");
@@ -44,23 +43,31 @@ public class CPU implements Runnable {
 		if (executing != null){
 			executing.setTimeLeft(executing.getTimeLeft() - 1);
 			if (executing.getTimeLeft() <= 0){
-				// request another process
-				executing = this.scheduler.request();
-				// plus one because we are subtracting at the end of the method and the process hasn't started executing yet
-				quantumCounter = this.scheduler.getQuantum() + 1; 
+				scheduler.endProcess(executing);
+				executing = this.scheduler.request(); // request another process
+				requested = true;
+				quantumCounter = this.scheduler.getQuantum() + 1;  // plus one because we are subtracting at the end of the method and the process hasn't started executing yet
 			}
 		}
+		if (executing != null){
+			if (executing.getPriority() != 0)
+				quantumCounter--;
+			else
+				quantumCounter = this.scheduler.getQuantum();
+		}
 		
-		quantumCounter--;
 		
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(1);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		
 		if (quantumCounter <= 0){
-			executing = this.scheduler.request();
+			if (!requested){
+				executing.executing = false;
+				executing = this.scheduler.request();
+			}
 			quantumCounter = this.scheduler.getQuantum();
 		}
 		

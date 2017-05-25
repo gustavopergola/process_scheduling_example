@@ -9,11 +9,11 @@ public class SubmissionRow extends Row {
 	private UserRow ur;
 	private Scheduler scheduler;
 	
-	public SubmissionRow(Scheduler scheduler) {
+	public SubmissionRow(Scheduler scheduler, RealTimeRow rtr, UserRow ur) {
 		super();
-		rtr = new RealTimeRow();
-		ur = new UserRow();
 		this.scheduler = scheduler; 
+		this.ur = ur;
+		this.rtr = rtr;
 	}
 	
 	// admits next process on the submission row (FCFS)
@@ -24,7 +24,7 @@ public class SubmissionRow extends Row {
 		Process process = super.list.pop();
 	
 		// checks if there's enough memory space for the new process, swap out if needed
-		this.scheduler.checkMemorySpace(process);
+		//this.scheduler.checkMemorySpace(process);
 		
 		if (process.getPriority() == 0){
 			rtr.submit(process);

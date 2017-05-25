@@ -22,6 +22,8 @@ public class Main   {
 		readFile(new File ("file.txt"), scheduler);
 		
 		CPU core1 = new CPU(scheduler);
+		
+		scheduler.run();
 		core1.run();
 		
 	}
@@ -46,13 +48,10 @@ public class Main   {
 		
 		button1.setOnAction(e -> {
 			if (readFile(fileChooser.showOpenDialog(primaryStage), scheduler)){
-				
 				// Display rows
 				RowWindow.display(scheduler);
 				
-				
 			}else {
-				
 				// Show error message in case there is smth wrong with the file
 				Label labelError = new Label ("Impossible to read from this file!");	
 				layout1.getChildren().add(labelError);
