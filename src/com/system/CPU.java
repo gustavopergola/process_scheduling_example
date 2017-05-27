@@ -1,6 +1,6 @@
 package com.system;
 
-public class CPU implements Runnable {
+public class CPU{
 	private Process executing;
 	private int coreId;
 	private Scheduler scheduler;
@@ -27,7 +27,7 @@ public class CPU implements Runnable {
 		return executing;
 	}
 
-	@Override
+	/**@Override
 	public void run() {
 		boolean requested = false;
 		
@@ -72,5 +72,5 @@ public class CPU implements Runnable {
 		}
 		
 		this.run ();
-	}
+	}**/
 }

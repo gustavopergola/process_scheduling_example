@@ -3,7 +3,7 @@ package com.system;
 import java.util.ArrayList;
 
 public class Processor {	
-	private ArrayList<CPU> cores;
+	/**private ArrayList<CPU> cores;
 
 	public Processor (int cores){
 		this.cores = new ArrayList <CPU>();
@@ -29,6 +29,6 @@ public class Processor {
 			if(this.cores.get(i).empty())
 				return this.cores.get(i);
 		return null;
-	}
+	}**/
 	
 }

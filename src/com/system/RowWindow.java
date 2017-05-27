@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 
 public class RowWindow {
 	
-	public static void display(Scheduler scheduler) {
+	public static void display(FeedbackScheduler feedbackScheduler, FCFSScheduler fcfsScheduler) {
 		Stage window = new Stage ();
 		window.setTitle("Row window");
 		window.setMinWidth(250);
@@ -26,7 +26,7 @@ public class RowWindow {
 		label.setFont(new Font("Roboto", 30 ));
 		
 		VBox layout = new VBox (10);
-		layout.getChildren().addAll(label, addRow(scheduler, scheduler.getSubmissionRow(), "Submission"), addRow(scheduler, scheduler.getUserRow(), "User"), addRow(scheduler, scheduler.getRealTimeRow(), "Real Time"));
+		layout.getChildren().addAll(label, addRow(scheduler.getSubmissionRow(), "Submission"), addRow(scheduler.getUserRow(), "User"), addRow( scheduler.getRealTimeRow(), "Real Time"));
 		layout.setAlignment(Pos.TOP_CENTER);
 		
 		Scene scene = new Scene (layout, 800, 200);
@@ -35,7 +35,7 @@ public class RowWindow {
 		
 	}
 
-	private static HBox addRow(Scheduler scheduler, Row row, String name) {
+	private static HBox addRow(Row row, String name) {
 		
 		HBox hb = new HBox(5);
 		

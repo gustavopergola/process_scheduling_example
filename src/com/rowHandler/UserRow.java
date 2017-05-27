@@ -8,7 +8,7 @@ public class UserRow extends Row {
 		super();
 	}
 	
-	public Process LRU (){
+	/**public Process LRU (){
 		// iterates to find least recently used process with priority 3
 		// in case it it doesn't find any priority 3 process, do the same with priority 2 and 1
 		
@@ -63,6 +63,6 @@ public class UserRow extends Row {
 		
 		return process;
 		
-	}
+	}**/
 
 }

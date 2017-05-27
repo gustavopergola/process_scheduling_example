@@ -20,6 +20,7 @@ public class Row {
 	}
 	
 	public void submit (Process process){
+		if (process == null) return;
 		list.insert(process);
 	}
 	

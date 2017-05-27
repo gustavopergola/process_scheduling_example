@@ -18,13 +18,12 @@ public class Main   {
 	public static void main(String[] args) {
 
 		//launch(args);
-		Scheduler scheduler = new Scheduler ();
-		readFile(new File ("file.txt"), scheduler);
+		FeedbackScheduler feedbackScheduler = new FeedbackScheduler ();
+		//readFile(new File ("file.txt"), scheduler);
 		
-		CPU core1 = new CPU(scheduler);
+		//CPU core1 = new CPU();
 		
-		scheduler.run();
-		core1.run();
+		//core1.run();
 		
 	}
 
@@ -126,6 +125,10 @@ public class Main   {
 		}
 	}
 	
+	// TODO user row are feedbacks rows
+	// TODO WE need to have 2 schedulers instead of 1 imlementing 2 policies
+	// TODO Escalonators need to be multi programmed, not sequencial
+	// TODO CPU's can be sequencial, there's no need for multiprgrammed CPU's
 	// TODO	Alocação de memória apropriada (finished process isn't being seen on LRU)
 	// TODO suspended processes
 	// TODO Manipulação de processos em paralelo usando threads
