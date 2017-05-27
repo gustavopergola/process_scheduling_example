@@ -29,15 +29,12 @@ public class Main {
 		
 		sr.admitAll();
 		
-		// check rows
-		for (int i = 0; i < 3; i++){
-			System.out.println(" Fila Feedback " + (i+1));
-			System.out.println(feedbackScheduler.getUserQueue(i+1).toString());
-		}
+		Thread feedbackThread = new Thread (feedbackScheduler);
+		feedbackThread.start();
 		
-		System.out.println("Fila FCFS");
-		System.out.println(fcfsScheduler.getFcfsQueue().toString());
-		
+		Thread fcfsThread = new Thread (fcfsScheduler);
+		fcfsThread.start();
+	
 		
 	}
 
@@ -138,6 +135,7 @@ public class Main {
 		}
 	}
 	
+	// TODO Process Arrival time
 	// TODO We need to have 2 schedulers instead of 1 implementing 2 policies
 	// TODO Escalonators need to be multi programmed, not sequencial
 	// TODO CPU's can be sequencial, there's no need for multiprgrammed CPU's

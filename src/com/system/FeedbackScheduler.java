@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.rowHandler.Row;
 
-public class FeedbackScheduler extends Scheduler {
+public class FeedbackScheduler extends Scheduler implements Runnable {
 	
 	private ArrayList <Row> userQueue = new ArrayList<Row>(3);
 	
@@ -19,7 +19,7 @@ public class FeedbackScheduler extends Scheduler {
 		return userQueue.get(id - 1);
 	}
 	
-	public Process request(){
+	private Process request(){
 		Process process = null;
 		for (int i= 0; i < userQueue.size(); i++ ){
 			process = userQueue.get(i).getList().pop();
@@ -41,6 +41,19 @@ public class FeedbackScheduler extends Scheduler {
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public void run (){
+		
+		// pega novo processo da fila
+		// checa se tem cpu livre
+		// deixa cpu executar 1 ciclo
+		// checa com a cpu se o processo terminou ou se teve interrupção
+		
+		
+		
+		
 	}
 	
 }

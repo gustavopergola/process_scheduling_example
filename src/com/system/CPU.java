@@ -27,7 +27,7 @@ public class CPU{
 		return executing;
 	}
 
-	/**@Override
+	/**
 	public void run() {
 		boolean requested = false;
 		
