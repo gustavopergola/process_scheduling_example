@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 
 public class RowWindow {
 	
-	public static void display(FeedbackScheduler feedbackScheduler, FCFSScheduler fcfsScheduler) {
+	/**public static void display(FeedbackScheduler feedbackScheduler, FCFSScheduler fcfsScheduler) {
 		Stage window = new Stage ();
 		window.setTitle("Row window");
 		window.setMinWidth(250);
@@ -56,5 +56,5 @@ public class RowWindow {
 		hb.setAlignment(Pos.BASELINE_LEFT);
 		
 		return hb;
-	}
+	}**/
 }

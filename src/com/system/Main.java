@@ -2,6 +2,8 @@ package com.system;
 import java.io.File;
 import java.util.Scanner;
 
+import com.rowHandler.SubmissionRow;
+
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,25 +13,37 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class Main   {
+public class Main {
 	
 	Scene scene1, scene2;
 	
 	public static void main(String[] args) {
 
 		//launch(args);
-		FeedbackScheduler feedbackScheduler = new FeedbackScheduler ();
-		//readFile(new File ("file.txt"), scheduler);
 		
-		//CPU core1 = new CPU();
+		FeedbackScheduler feedbackScheduler = new FeedbackScheduler();
+		FCFSScheduler fcfsScheduler = new FCFSScheduler();
+		SubmissionRow sr = new SubmissionRow(feedbackScheduler, fcfsScheduler);
 		
-		//core1.run();
+		readFile(new File ("file.txt"), sr);
+		
+		sr.admitAll();
+		
+		// check rows
+		for (int i = 0; i < 3; i++){
+			System.out.println(" Fila Feedback " + (i+1));
+			System.out.println(feedbackScheduler.getUserQueue(i+1).toString());
+		}
+		
+		System.out.println("Fila FCFS");
+		System.out.println(fcfsScheduler.getFcfsQueue().toString());
+		
 		
 	}
 
 	public void start(Stage primaryStage) throws Exception {
 		
-		Scheduler scheduler = new Scheduler ();
+		/**Scheduler scheduler = new Scheduler ();
 		
 		primaryStage.setTitle("Scheduler");
 		
@@ -62,11 +76,11 @@ public class Main   {
 		scene1 = new Scene(layout1, 300, 250);
 	
 		primaryStage.setScene(scene1);
-		primaryStage.show();
+		primaryStage.show();**/
 		
 	}
 
-	private static boolean readFile(File file, Scheduler scheduler){
+	private static boolean readFile(File file, SubmissionRow sr){
 		// Lets consider a perfect file: if it exists, there's no syntax error or whatsoever
 		try {
 			Scanner sc = new Scanner(file);
@@ -115,8 +129,7 @@ public class Main   {
 					}
 					
 				}
-				scheduler.submit(newProcess);
-				
+				sr.submit(newProcess);
 			}
 			sc.close();
 			return true;
@@ -125,8 +138,7 @@ public class Main   {
 		}
 	}
 	
-	// TODO user row are feedbacks rows
-	// TODO WE need to have 2 schedulers instead of 1 imlementing 2 policies
+	// TODO We need to have 2 schedulers instead of 1 implementing 2 policies
 	// TODO Escalonators need to be multi programmed, not sequencial
 	// TODO CPU's can be sequencial, there's no need for multiprgrammed CPU's
 	// TODO	Alocação de memória apropriada (finished process isn't being seen on LRU)

@@ -10,7 +10,6 @@ import com.util.MemoryList;
 public abstract class Scheduler{
 		protected int lastId = 0;
 		protected int quantum = 2;
-		protected SubmissionRow sr = new SubmissionRow(this);
 		protected MemoryList memory = new MemoryList ();
 		protected int admitDelay = 4;
 		
@@ -22,15 +21,6 @@ public abstract class Scheduler{
 		public Scheduler (int quantum){
 			this.quantum = quantum;	
 		}	
-
-		public void submit (Process process){
-			process.setId(++lastId);
-			sr.submit(process);
-		}
-		
-		public Row getSubmissionRow (){
-			return this.sr;
-		}
 		
 		public void checkMemorySpace (Process process){
 			

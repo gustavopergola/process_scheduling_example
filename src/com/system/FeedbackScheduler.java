@@ -33,4 +33,14 @@ public class FeedbackScheduler extends Scheduler {
 		return null;
 	}
 	
+	public boolean submit (Process process, int processId){
+		if (process != null){
+			// TODO: CHECK MEMORY SPACE
+			process.setId(processId);
+			getUserQueue(1).submit(process);
+			return true;
+		}
+		return false;
+	}
+	
 }
