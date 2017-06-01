@@ -20,8 +20,8 @@ public class Main {
 	public static void main(String[] args) {
 
 		//launch(args);
-		
-		FeedbackScheduler feedbackScheduler = new FeedbackScheduler();
+		Processor processor = new Processor (4);
+		FeedbackScheduler feedbackScheduler = new FeedbackScheduler(processor);
 		FCFSScheduler fcfsScheduler = new FCFSScheduler();
 		SubmissionRow sr = new SubmissionRow(feedbackScheduler, fcfsScheduler);
 		
@@ -29,11 +29,13 @@ public class Main {
 		
 		sr.admitAll();
 		
-		Thread feedbackThread = new Thread (feedbackScheduler);
+		feedbackScheduler.run();
+		
+		/**Thread feedbackThread = new Thread (feedbackScheduler);
 		feedbackThread.start();
 		
 		Thread fcfsThread = new Thread (fcfsScheduler);
-		fcfsThread.start();
+		fcfsThread.start();**/
 	
 		
 	}

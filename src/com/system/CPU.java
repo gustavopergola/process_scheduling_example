@@ -3,20 +3,19 @@ package com.system;
 public class CPU{
 	private Process executing;
 	private int coreId;
-	private Scheduler scheduler;
 	int quantumCounter;
 	
-	public CPU (Scheduler scheduler) {
-		this.scheduler = scheduler;
-		quantumCounter = this.scheduler.getQuantum();
+	public CPU (int coreId) {
+		this.coreId = coreId;
 	}
 
-	public boolean execute (Process process)  {
-		if 	(executing != null) return false;
-		else{
-			this.executing = process;
-			return true;
+	public void execute(Process process)  {
+		// TODO checar se é preemptivo para FCFS
+		// TODO deixar de deixar sempre vazio
+		if (process != null){
+			if (process.getTimeLeft() > 0) process.setTimeLeft(process.getTimeLeft() - 1);
 		}
+			
 	}
 	
 	public boolean empty (){
@@ -27,6 +26,9 @@ public class CPU{
 		return executing;
 	}
 
+	public String toString (){
+		return "CPU" + this.coreId;
+	}
 	/**
 	public void run() {
 		boolean requested = false;

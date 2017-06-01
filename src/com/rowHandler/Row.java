@@ -34,4 +34,8 @@ public class Row {
 		 return answer;
 	}
 	
+	public boolean remove (Process process){
+		return list.remove(process);
+	}
+	
 }

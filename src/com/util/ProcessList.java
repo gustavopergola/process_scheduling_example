@@ -33,9 +33,12 @@ public class ProcessList {
 				// found the process
 				if (ant != null){
 					ant.next = aux.next;
-					return true;
+				}else {
+					first = aux.next;
 				}
+				return true;
 			}
+			ant = aux;
 			aux = aux.next;
 		}
 		return false;

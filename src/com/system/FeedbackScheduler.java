@@ -7,12 +7,16 @@ import com.rowHandler.Row;
 public class FeedbackScheduler extends Scheduler implements Runnable {
 	
 	private ArrayList <Row> userQueue = new ArrayList<Row>(3);
+	private Processor processor;
+	private CPU freeCPU = null;
 	
-	public FeedbackScheduler () {
+	public FeedbackScheduler (Processor processor) {
 		super();
 		userQueue.add(new Row());
 		userQueue.add(new Row());
 		userQueue.add(new Row());
+		this.processor = processor;
+		
 	}
 	
 	public Row getUserQueue (int id){
@@ -43,30 +47,57 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 		return false;
 	}
 	
+	public boolean withdraw (Process process){
+		for (int i = 0; i < userQueue.size(); i ++){
+			if (userQueue.get(i).remove(process)){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Override
 	public void run (){
 		Process process = null;
-		// pega novo processo da fila
-		for (int i = 0; i < userQueue.size(); i++){
-			process = userQueue.get(i).getList().pop();
-			if (process != null) break;
-		}
-		if (process != null){
-			// checa se tem cpu livre
+		
+		freeCPU = this.processor.getFreeCPU();
+		
+		// checa se tem cpu livre
+		if (freeCPU != null){
+			// pega novo processo da fila
+			process = this.request();
+			// executa um ciclo
+			freeCPU.execute(process);
+			
+			// TODO checa interrupção do fcfs
+			
+			// se n tiver interrupção, checa se o processo já acabou, pega outro processo caso contrário
+			if (process != null){
+				if (process.getTimeLeft() > 0){
+					freeCPU.execute(process);
+				}else {
+					this.withdraw(process);
+					process = this.request();
+				}
+			}
 			
 		}
 		
-		// deixa cpu executar 1 ciclo
-		// checa com a cpu se o processo terminou ou se teve interrupção
-		for (int i =0; i < 100; i++){
-			System.out.println(i + "feedback");
-			try {
-				Thread.sleep(499);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+
+		// checa se o processo terminou e imprime se for o caso
+		if (process != null && freeCPU != null){
+			if (process.getTimeLeft() == 0){
+				this.withdraw (process);
 			}
-		}		
+			System.out.println(process.toString() + " " + process.getTimeLeft());
+		}
+		
+		try {
+			Thread.sleep(49);
+			run ();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
 }
