@@ -38,4 +38,8 @@ public class Row {
 		return list.remove(process);
 	}
 	
+	public Process getNextProcess(){
+		return list.getNextProcess();
+	}
+	
 }

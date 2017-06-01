@@ -100,6 +100,35 @@ public class Process {
 		this.priority = priority;
 		
 	}
+	
+	public String decode (){
+		String resp = "";
+		// <arrival time>, <priority>, <processor time>, <Mbytes>, <# impressoras>, <# scanners>, <# modems>, <# CDs>
+		resp += this.arrivalTime + ", ";
+		resp += this.priority + ", ";
+		resp += this.timeLeft + ", ";
+		resp += this.size + ", ";
+		
+		int printers = 0;
+		if (getResources().get(0) != null) printers++;
+		if (getResources().get(1) != null) printers++;
+		resp += printers + ", ";
+		
+		int scanners = 0;
+		if (getResources().get(2) != null) scanners++;
+		resp += scanners + ", ";
+		
+		int modems = 0;
+		if (getResources().get(3) != null) modems++;
+		resp += modems + "," ;
+		
+		int CDs = 0;
+		if (getResources().get(4) != null) CDs++;
+		if (getResources().get(5) != null) CDs++;
+		resp += CDs + "";
+		
+		return resp;
+	}
 
 	public int getTimeLeft() {
 		return timeLeft;

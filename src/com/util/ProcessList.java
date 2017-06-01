@@ -74,4 +74,22 @@ public class ProcessList {
 		
 		
 	}
+
+	public Process getNextProcess() {
+		ProcessNode aux = this.first;
+		if (this.first == null) return null;
+		Process first = this.first.process;
+		while (aux != null){
+			if (aux.process.getArrivalTime() < first.getArrivalTime()){
+				first = aux.process;
+			}
+			aux = aux.next;
+		}
+		if (first != null){
+			System.out.println("aqui");
+			remove(first);
+			return first;
+		}
+		return null;
+	}
 }

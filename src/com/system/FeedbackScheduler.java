@@ -63,8 +63,6 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 	public void run (){
 		if (firstQuantum){
 			// ----------- First Quantum ------------
-			
-			
 			freeCPU = this.processor.getFreeCPU();
 			
 			// checa se tem cpu livre
@@ -77,8 +75,8 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 			
 			firstQuantum = false;
 		}else {
-			// ----------- Second Quantum ------------
 			
+			// ----------- Second Quantum ------------
 			// se n tiver interrup��o, checa se o processo j� acabou, pega outro processo caso contr�rio
 			if (freeCPU != null){
 				// TODO checa interrup��o do fcfs

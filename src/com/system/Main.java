@@ -1,7 +1,13 @@
 package com.system;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.text.Format;
+import java.util.Locale;
 import java.util.Scanner;
 
+import com.rowHandler.Row;
 import com.rowHandler.SubmissionRow;
 
 /**import javafx.application.Application;
@@ -25,11 +31,12 @@ public class Main {
 		FCFSScheduler fcfsScheduler = new FCFSScheduler();
 		SubmissionRow sr = new SubmissionRow(feedbackScheduler, fcfsScheduler);
 		
-		readFile(new File ("file.txt"), sr);
 		
-		sr.admitAll();
+		readFile(orderFile(new File ("file.txt")), sr);
 		
-		feedbackScheduler.run();
+		//sr.admitAll();
+		
+		//feedbackScheduler.run();
 		
 		/**Thread feedbackThread = new Thread (feedbackScheduler);
 		feedbackThread.start();
@@ -42,6 +49,36 @@ public class Main {
 
 	//public void start(Stage primaryStage) throws Exception {
 		
+	private static File orderFile(File file)  {
+		
+		
+		
+		PrintWriter writer;
+		Scanner sc;
+		Process process = null;
+		Row auxRow = new Row();
+		
+		try {
+			readFile(file, auxRow);
+			
+			writer = new PrintWriter("orderedProcesses.txt", "UTF-8");
+			while (true){
+				process = auxRow.getNextProcess();
+				if (process == null) break;
+				writer.println(process.decode());
+				process = null;
+			}
+			writer.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		return new File ("orderedProcesses.txt");
+		
+	}
+
 		/**Scheduler scheduler = new Scheduler ();
 		
 		primaryStage.setTitle("Scheduler");
@@ -79,7 +116,7 @@ public class Main {
 		
 	//}
 
-	private static boolean readFile(File file, SubmissionRow sr){
+	private static boolean readFile(File file, Row sr){
 		// Lets consider a perfect file: if it exists, there's no syntax error or whatsoever
 		try {
 			Scanner sc = new Scanner(file);
