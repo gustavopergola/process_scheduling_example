@@ -69,9 +69,9 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 			// executa um ciclo
 			freeCPU.execute(process);
 			
-			// TODO checa interrupção do fcfs
+			// TODO checa interrupï¿½ï¿½o do fcfs
 			
-			// se n tiver interrupção, checa se o processo já acabou, pega outro processo caso contrário
+			// se n tiver interrupï¿½ï¿½o, checa se o processo jï¿½ acabou, pega outro processo caso contrï¿½rio
 			if (process != null){
 				if (process.getTimeLeft() > 0){
 					freeCPU.execute(process);
@@ -91,6 +91,10 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 			}
 			System.out.println(process.toString() + " " + process.getTimeLeft());
 		}
+		
+		// tenta pular o clock (Ã© protegido pelo processor para que esteja sincronizado)
+		this.processor.feedbackDone = true;
+		this.processor.incrementClock();
 		
 		try {
 			Thread.sleep(49);

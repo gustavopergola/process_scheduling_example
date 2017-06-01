@@ -4,18 +4,18 @@ import java.util.Scanner;
 
 import com.rowHandler.SubmissionRow;
 
-import javafx.application.Application;
+/**import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+import javafx.stage.Stage;**/
 
 public class Main {
 	
-	Scene scene1, scene2;
+	//Scene scene1, scene2;
 	
 	public static void main(String[] args) {
 
@@ -40,7 +40,7 @@ public class Main {
 		
 	}
 
-	public void start(Stage primaryStage) throws Exception {
+	//public void start(Stage primaryStage) throws Exception {
 		
 		/**Scheduler scheduler = new Scheduler ();
 		
@@ -77,7 +77,7 @@ public class Main {
 		primaryStage.setScene(scene1);
 		primaryStage.show();**/
 		
-	}
+	//}
 
 	private static boolean readFile(File file, SubmissionRow sr){
 		// Lets consider a perfect file: if it exists, there's no syntax error or whatsoever
@@ -141,9 +141,9 @@ public class Main {
 	// TODO We need to have 2 schedulers instead of 1 implementing 2 policies
 	// TODO Escalonators need to be multi programmed, not sequencial
 	// TODO CPU's can be sequencial, there's no need for multiprgrammed CPU's
-	// TODO	Alocação de memória apropriada (finished process isn't being seen on LRU)
+	// TODO	Alocaï¿½ï¿½o de memï¿½ria apropriada (finished process isn't being seen on LRU)
 	// TODO suspended processes
-	// TODO Manipulação de processos em paralelo usando threads
+	// TODO Manipulaï¿½ï¿½o de processos em paralelo usando threads
 	// TODO Planejamento geral do escalonador de feedback FCFS
 	// TODO Tratamento de recursos
 	
