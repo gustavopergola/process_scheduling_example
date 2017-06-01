@@ -8,7 +8,10 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 	
 	private ArrayList <Row> userQueue = new ArrayList<Row>(3);
 	private Processor processor;
+	private Process process = null;
 	private CPU freeCPU = null;
+	private boolean firstQuantum = true;
+	private boolean executed = false;
 	
 	public FeedbackScheduler (Processor processor) {
 		super();
@@ -58,43 +61,63 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 
 	@Override
 	public void run (){
-		Process process = null;
-		
-		freeCPU = this.processor.getFreeCPU();
-		
-		// checa se tem cpu livre
-		if (freeCPU != null){
-			// pega novo processo da fila
-			process = this.request();
-			// executa um ciclo
-			freeCPU.execute(process);
+		if (firstQuantum){
+			// ----------- First Quantum ------------
 			
-			// TODO checa interrup��o do fcfs
+			
+			freeCPU = this.processor.getFreeCPU();
+			
+			// checa se tem cpu livre
+			if (freeCPU != null){
+				// pega novo processo da fila
+				process = this.request();
+				// executa um ciclo
+				freeCPU.execute(process);	
+			}
+			
+			firstQuantum = false;
+		}else {
+			// ----------- Second Quantum ------------
 			
 			// se n tiver interrup��o, checa se o processo j� acabou, pega outro processo caso contr�rio
-			if (process != null){
-				if (process.getTimeLeft() > 0){
-					freeCPU.execute(process);
-				}else {
-					this.withdraw(process);
-					process = this.request();
+			if (freeCPU != null){
+				// TODO checa interrup��o do fcfs
+				if (process != null){
+					if (process.getTimeLeft() > 0){
+						freeCPU.execute(process);
+						executed = true;
+					}else {
+						this.withdraw(process);
+						process = this.request();
+					}
 				}
 			}
+
+			// checa se o processo terminou e imprime se for o caso
+			if (process != null && freeCPU != null){
+				if (process.getTimeLeft() == 0){
+					this.withdraw (process);
+				}else {
+					// execute process in case he is not done yet and hasnt been executed on the second quantum
+					if (executed == false)
+						freeCPU.execute(process);
+				}
+				
+			}
 			
+			firstQuantum = true;
 		}
 		
-
-		// checa se o processo terminou e imprime se for o caso
-		if (process != null && freeCPU != null){
-			if (process.getTimeLeft() == 0){
-				this.withdraw (process);
-			}
-			System.out.println(process.toString() + " " + process.getTimeLeft());
-		}
+		
+		// -------- Every Quantum ---------
 		
 		// tenta pular o clock (é protegido pelo processor para que esteja sincronizado)
 		this.processor.feedbackDone = true;
 		this.processor.incrementClock();
+		
+		executed = false;
+		if (process != null)
+			System.out.println(process.toString() + " " + processor.getClock());
 		
 		try {
 			Thread.sleep(49);
