@@ -45,15 +45,28 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 	
 	@Override
 	public void run (){
-		
+		Process process = null;
 		// pega novo processo da fila
-		// checa se tem cpu livre
+		for (int i = 0; i < userQueue.size(); i++){
+			process = userQueue.get(i).getList().pop();
+			if (process != null) break;
+		}
+		if (process != null){
+			// checa se tem cpu livre
+			
+		}
+		
 		// deixa cpu executar 1 ciclo
 		// checa com a cpu se o processo terminou ou se teve interrupção
-		
-		
-		
-		
+		for (int i =0; i < 100; i++){
+			System.out.println(i + "feedback");
+			try {
+				Thread.sleep(499);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}		
 	}
 	
 }
