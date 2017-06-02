@@ -30,13 +30,14 @@ public class Main {
 		FeedbackScheduler feedbackScheduler = new FeedbackScheduler(processor);
 		FCFSScheduler fcfsScheduler = new FCFSScheduler();
 		SubmissionRow sr = new SubmissionRow(feedbackScheduler, fcfsScheduler);
-		
+		processor.setSubmissionRow(sr);
 		
 		readFile(orderFile(new File ("file.txt")), sr);
 		
-		//sr.admitAll();
+		sr.admitAll();
 		
-		//feedbackScheduler.run();
+		feedbackScheduler.run();
+		
 		
 		/**Thread feedbackThread = new Thread (feedbackScheduler);
 		feedbackThread.start();
@@ -50,8 +51,6 @@ public class Main {
 	//public void start(Stage primaryStage) throws Exception {
 		
 	private static File orderFile(File file)  {
-		
-		
 		
 		PrintWriter writer;
 		Scanner sc;
@@ -122,9 +121,11 @@ public class Main {
 			Scanner sc = new Scanner(file);
 			while (sc.hasNextLine()){
 				Process newProcess = new Process();
+				
 				String line = sc.nextLine();
 				String [] infos = new String [8];
 				infos = line.split(", ");
+				
 				
 				for (int i = 0; i < infos.length; i++){
 					if (i==0){
@@ -162,6 +163,8 @@ public class Main {
 						// check for numbers of cd drivers
 						for (int j = 0; j < Integer.parseInt(infos[i]); j++)
 							newProcess.setResources(new Resource("CD"));
+					}else if(i==8){
+						newProcess.id = Integer.parseInt(infos[i]) + 1;
 					}
 					
 				}
@@ -169,7 +172,8 @@ public class Main {
 			}
 			sc.close();
 			return true;
-		} catch (Exception e) {
+		} catch (FileNotFoundException e) {
+			System.err.println("erro: " + e.toString());
 			return false;
 		}
 	}

@@ -2,11 +2,14 @@ package com.system;
 
 import java.util.ArrayList;
 
+import com.rowHandler.SubmissionRow;
+
 public class Processor {
 	private ArrayList <CPU> cpuList = new ArrayList <CPU> (4);
 	private int clock = 0;
 	public boolean fcfsDone = true;
 	public boolean feedbackDone = true;
+	private SubmissionRow sr = null;
 	
 	public Processor (int cores){
 		if (cores <= 0) 
@@ -14,6 +17,14 @@ public class Processor {
 		for (int i = 0; i < cores; i++) 
 			cpuList.add(new CPU(i + 1));
 		
+	}
+	
+	public void setSubmissionRow (SubmissionRow sr){
+		this.sr = sr;
+	}
+	
+	public SubmissionRow getSubmissionRow(){
+		return this.sr;
 	}
 	
 	public int getNumberOfCores (){
@@ -37,6 +48,11 @@ public class Processor {
 			this.fcfsDone = true;
 			this.feedbackDone = false;
 			this.clock++;
+			if (this.clock % 2 == 0){
+				if(sr != null){
+					sr.admitAll();
+				}
+			}
 		}
 	}
 }

@@ -22,13 +22,19 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 		
 	}
 	
+	public Processor getProcessor (){
+		return this.processor;
+	}
+	
 	public Row getUserQueue (int id){
 		return userQueue.get(id - 1);
 	}
 	
 	private Process request(){
 		Process process = null;
+
 		for (int i= 0; i < userQueue.size(); i++ ){
+
 			process = userQueue.get(i).getList().pop();
 			
 			// troca de fila
@@ -61,6 +67,7 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 
 	@Override
 	public void run (){
+
 		if (firstQuantum){
 			// ----------- First Quantum ------------
 			freeCPU = this.processor.getFreeCPU();
@@ -119,7 +126,21 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 		
 		try {
 			Thread.sleep(49);
+			if (this.processor != null){
+				if (this.processor.getSubmissionRow() != null){
+					// checks if submission row is empty
+					// TODO checks if all queues are empty
+					// TODO checks if all CPUs are empty
+					// TODO break execution
+					if (this.processor.getSubmissionRow().size() > 0){
+						//run ();
+					}
+				}
+				
+			}
+			
 			run ();
+			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

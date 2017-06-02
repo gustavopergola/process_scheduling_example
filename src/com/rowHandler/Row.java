@@ -42,4 +42,8 @@ public class Row {
 		return list.getNextProcess();
 	}
 	
+	public int size(){
+		return list.size();
+	}
+	
 }

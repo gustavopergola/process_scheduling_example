@@ -86,10 +86,19 @@ public class ProcessList {
 			aux = aux.next;
 		}
 		if (first != null){
-			System.out.println("aqui");
 			remove(first);
 			return first;
 		}
 		return null;
+	}
+
+	public int size() {
+		int n = 0;
+		ProcessNode aux = first;
+		while (aux != null){
+			n++;
+			aux = aux.next;
+		}
+		return n;
 	}
 }

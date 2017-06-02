@@ -19,10 +19,16 @@ public class SubmissionRow extends Row {
 	public void admitAll(){
 		while (super.getList().getFirst() != null)
 			if (super.getList().getFirstProcess() != null)
-				if (super.getList().getFirstProcess().getPriority() > 0)
-					this.feedbackScheduler.submit(super.getList().pop(), ++lastId);
-				else
-					this.fcfsScheduler.submit(super.getList().pop(), ++lastId);
+				// checks if process already arrived (simulated)
+				if (super.getList().getFirstProcess().getArrivalTime() <= this.feedbackScheduler.getProcessor().getClock()){
+					if (super.getList().getFirstProcess().getPriority() > 0)
+						this.feedbackScheduler.submit(super.getList().pop(), ++lastId);
+					else
+						this.fcfsScheduler.submit(super.getList().pop(), ++lastId);
+				}else {
+					break;
+				}
+				
 	}
 	
 }

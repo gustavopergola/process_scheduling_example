@@ -16,12 +16,12 @@ public class Process {
 	public Process(){
 		resources = new ArrayList<Resource>(5);	
 		
-		resources.add(null); //0 first printer
-		resources.add(null); //1 second printer
-		resources.add(null); //2 first scanner
-		resources.add(null); //3 first modem
-		resources.add(null); //4 first CD
-		resources.add(null); //5 second CD
+		resources.add(new Resource("nulo")); //0 first printer
+		resources.add(new Resource("nulo")); //1 second printer
+		resources.add(new Resource("nulo")); //2 first scanner
+		resources.add(new Resource("nulo")); //3 first modem
+		resources.add(new Resource("nulo")); //4 first CD
+		resources.add(new Resource("nulo")); //5 second CD
 	}
 	
 	public int getPriority (){
@@ -55,18 +55,19 @@ public class Process {
 	public boolean setResources(Resource resource) {
 		if (resource.getName().equals("Printer")){
 			// checks for first printer
-			if (resources.get(0) == null){
+			if (resources.get(0).getName().equals("nulo")){
 				resources.add(0, resource);
+				return true;
 			//checks for second printer
-			}else if (resources.get(1) == null) {
+			}else if (resources.get(1).getName().equals("nulo")) {
 				resources.add(1, resource);
+				return true;
 			}else {
 				return false;
 			}
-			return true;
 		}else if(resource.getName().equals("Scanner")){
 			// checks for first scanner
-			if (resources.get(2) == null){
+			if (resources.get(2).getName().equals("nulo")){
 				resources.add(2, resource);
 			}else {
 				return false;
@@ -74,7 +75,7 @@ public class Process {
 			return true;
 		}else if(resource.getName().equals("Modem")){
 			// checks for first modem
-			if (resources.get(3) == null){
+			if (resources.get(3).getName().equals("nulo")){
 				resources.add(3, resource);
 			}else {
 				return false;
@@ -84,11 +85,11 @@ public class Process {
 			// else is a CD driver
 			
 			// checks for first CD
-			if (resources.get(4) == null){
-				resources.add(0, resource);
+			if (resources.get(4).getName().equals("nulo")){
+				resources.add(4, resource);
 			//checks for second CD
-			}else if (resources.get(5) == null) {
-				resources.add(1, resource);
+			}else if (resources.get(5).getName().equals("nulo")) {
+				resources.add(5, resource);
 			}else {
 				return false;
 			}
@@ -110,22 +111,29 @@ public class Process {
 		resp += this.size + ", ";
 		
 		int printers = 0;
-		if (getResources().get(0) != null) printers++;
-		if (getResources().get(1) != null) printers++;
-		resp += printers + ", ";
+		if (!resources.get(0).getName().equals("nulo")){
+			printers++;
+		}
+		if (!resources.get(1).getName().equals("nulo")){
+			System.out.println(getResources().get(1).getName());
+			printers++;
+		}
+		resp +=  printers + ", ";
 		
 		int scanners = 0;
-		if (getResources().get(2) != null) scanners++;
+		if (!resources.get(2).getName().equals("nulo")) scanners++;
 		resp += scanners + ", ";
 		
 		int modems = 0;
-		if (getResources().get(3) != null) modems++;
-		resp += modems + "," ;
+		if (!resources.get(3).getName().equals("nulo")) modems++;
+		resp +=  modems + ", " ;
 		
 		int CDs = 0;
-		if (getResources().get(4) != null) CDs++;
-		if (getResources().get(5) != null) CDs++;
-		resp += CDs + "";
+		if (!resources.get(4).getName().equals("nulo")) CDs++;
+		if (!resources.get(5).getName().equals("nulo")) CDs++;
+		resp +=  CDs + ", ";
+		
+		resp += priority + "";
 		
 		return resp;
 	}
