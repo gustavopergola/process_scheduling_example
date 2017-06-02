@@ -4,8 +4,12 @@ import com.rowHandler.Row;
 
 public class FCFSScheduler extends Scheduler implements Runnable {
 	private Row fcfsQueue = new Row();
-	public FCFSScheduler (){
+	private Process process = null;
+	private Processor processor;
+	private CPU freeCPU;
+	public FCFSScheduler (Processor processor){
 		super();
+		this.processor = processor;
 	}
 	
 	public boolean submit (Process process, int processId){
@@ -24,14 +28,14 @@ public class FCFSScheduler extends Scheduler implements Runnable {
 	
 	@Override
 	public void run (){
-		for (int i =0; i < 100; i++){
-			System.out.println(i + "FCFS");
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		// check queue 
+		if (this.fcfsQueue.size() > 0) process = this.fcfsQueue.getList().pop();
+		if (process != null){
+			
 		}
+		// check free CPU
+		// interrupts if needed
+		// execute process until it ends
+		
 	}
 }
