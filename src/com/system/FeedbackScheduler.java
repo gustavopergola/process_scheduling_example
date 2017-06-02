@@ -12,6 +12,7 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 	private CPU freeCPU = null;
 	private boolean firstQuantum = true;
 	private boolean executed = false;
+	private boolean stopFlag = false;
 	
 	public FeedbackScheduler (Processor processor) {
 		super();
@@ -19,7 +20,6 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 		userQueue.add(new Row());
 		userQueue.add(new Row());
 		this.processor = processor;
-		
 	}
 	
 	public Processor getProcessor (){
@@ -84,9 +84,9 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 		}else {
 			
 			// ----------- Second Quantum ------------
-			// se n tiver interrupï¿½ï¿½o, checa se o processo jï¿½ acabou, pega outro processo caso contrï¿½rio
+			// se n tiver interrupção, checa se o processo já acabou, pega outro processo caso contrário
 			if (freeCPU != null){
-				// TODO checa interrupï¿½ï¿½o do fcfs
+				// TODO checa interrupção do fcfs
 				if (process != null){
 					if (process.getTimeLeft() > 0){
 						freeCPU.execute(process);
@@ -122,24 +122,29 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 		
 		executed = false;
 		if (process != null)
-			System.out.println(process.toString() + " " + processor.getClock());
+			System.out.println(process.toString() + " " + processor.getClock() + " FEEDBACK ");
 		
 		try {
-			Thread.sleep(49);
+			Thread.sleep(90);
 			if (this.processor != null){
 				if (this.processor.getSubmissionRow() != null){
 					// checks if submission row is empty
-					// TODO checks if all queues are empty
-					// TODO checks if all CPUs are empty
+					// checks if all queues are empty
 					// TODO break execution
-					if (this.processor.getSubmissionRow().size() > 0){
-						//run ();
+					if (this.processor.getSubmissionRow().size() <= 0){
+						if (this.userQueue.get(0).size() <= 0 && this.userQueue.get(1).size() <= 0 && this.userQueue.get(2).size() <= 0){
+								stopFlag = true;
+						}
 					}
 				}
-				
 			}
 			
-			run ();
+			// recursive call
+			if (!stopFlag)
+				run ();
+			else 
+				System.out.println("User requests ended");
+				
 			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
