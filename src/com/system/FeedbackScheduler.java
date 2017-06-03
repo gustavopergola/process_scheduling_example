@@ -112,7 +112,6 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 			}
 		}
 		return false;
-		
 	}
 
 	@Override
@@ -133,7 +132,6 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 						// if it is, get another one
 						n++;
 					}else {
-						
 						// if it isn't, we found the process which has priority in being executed, finally
 						freeCPU.setExecuting(process);
 						// skip the process row at the user queue

@@ -11,7 +11,7 @@ public class Process {
 	public int id = 0; 
 	public int lastTimeUsed = 0;
 	public boolean executing;
-	public boolean firstQuantum = true;
+	public boolean firstQuantum = false; // TODO treat CPU loss bc of FCFS
 	
 	
 	public Process(){
@@ -143,6 +143,7 @@ public class Process {
 
 	public void setTimeLeft(int timeLeft) {
 		this.timeLeft = timeLeft;
+		this.firstQuantum = !this.firstQuantum;
 	}
 
 	public int getSize() {
