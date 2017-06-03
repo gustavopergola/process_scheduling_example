@@ -31,28 +31,10 @@ public class FCFSScheduler extends Scheduler implements Runnable {
 	
 	@Override
 	public void run (){
-		process = null;
-		// check queue 
-		if (this.fcfsQueue.size() > 0) process = this.fcfsQueue.getList().pop();
-		if (process != null){
-			freeCPU = this.processor.getFreeCPU();
-			if (freeCPU != null){ // no need for interruption, there's a free CPU avaiable
-				freeCPU.execute(process);
-				executingCPUs.add(freeCPU);
-			}else { // no free CPU avaible, interrupts some process
-				
-			}
-		}
+		
 		
 		this.processor.fcfsDone = true;
 		this.processor.incrementClock();
-		
-		
-		for (int i = 0; i < executingCPUs.size(); i++){
-			System.out.println(executingCPUs.get(i).getExecuting().toString() + " " + executingCPUs.get(i).getExecuting().getTimeLeft());
-			
-		}
-			
 		
 		try {
 			Thread.sleep(90);

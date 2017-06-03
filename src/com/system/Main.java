@@ -36,7 +36,7 @@ public class Main {
 		readFile(orderFile(new File ("file.txt")), sr);
 		
 		sr.admitAll();
-		feedbackScheduler.run();
+		fcfsScheduler.run();
 		
 		
 		/**Thread feedbackThread = new Thread (feedbackScheduler);
