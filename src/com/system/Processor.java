@@ -42,9 +42,16 @@ public class Processor {
 		return clock;
 	}
 	
+	public boolean searchProcess (Process process){
+		for (int i = 0; i < cpuList.size(); i++)
+			if (cpuList.get(i).getExecuting() == process)
+				return true;
+		return false;
+	}
+	
 	public void incrementClock(){
+		// check if all the schedulers are done
 		if (this.fcfsDone && this.feedbackDone){
-			// TODO fazer a sincronização no run() do fcfs
 			this.fcfsDone = true;
 			this.feedbackDone = false;
 			this.clock++;
@@ -53,7 +60,20 @@ public class Processor {
 					sr.admitAll();
 				}
 			}
+			
+			System.out.printf("CLOCK: %d", this.getClock());
+			
+			// execute CPU's 
+			for (int i = 0; i < cpuList.size(); i++){
+				cpuList.get(i).execute();
+			}
+			
+			
+			
+			System.out.printf("\n");
+				
 		}
+
 	}
 }
 

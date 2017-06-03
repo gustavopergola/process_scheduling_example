@@ -46,4 +46,8 @@ public class Row {
 		return list.size();
 	}
 	
+	public Process get(int index){
+		return this.list.get(index);
+	}
+	
 }

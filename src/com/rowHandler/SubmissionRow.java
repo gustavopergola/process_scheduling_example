@@ -8,7 +8,6 @@ import com.system.Scheduler;
 public class SubmissionRow extends Row {
 	private FeedbackScheduler feedbackScheduler;
 	private FCFSScheduler fcfsScheduler;
-	private int lastId = 0;
 	
 	public SubmissionRow(FeedbackScheduler feedbackScheduler, FCFSScheduler fcfsScheduler) {
 		super();
@@ -22,9 +21,9 @@ public class SubmissionRow extends Row {
 				// checks if process already arrived (simulated)
 				if (super.getList().getFirstProcess().getArrivalTime() <= this.feedbackScheduler.getProcessor().getClock()){
 					if (super.getList().getFirstProcess().getPriority() > 0)
-						this.feedbackScheduler.submit(super.getList().pop(), ++lastId);
+						this.feedbackScheduler.submit(super.getList().pop());
 					else
-						this.fcfsScheduler.submit(super.getList().pop(), ++lastId);
+						this.fcfsScheduler.submit(super.getList().pop());
 				}else {
 					break;
 				}

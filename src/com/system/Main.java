@@ -23,19 +23,19 @@ public class Main {
 	
 	//Scene scene1, scene2;
 	
+	
 	public static void main(String[] args) {
 
 		//launch(args);
 		Processor processor = new Processor (4);
 		FeedbackScheduler feedbackScheduler = new FeedbackScheduler(processor);
-		FCFSScheduler fcfsScheduler = new FCFSScheduler();
+		FCFSScheduler fcfsScheduler = new FCFSScheduler(processor);
 		SubmissionRow sr = new SubmissionRow(feedbackScheduler, fcfsScheduler);
 		processor.setSubmissionRow(sr);
 		
 		readFile(orderFile(new File ("file.txt")), sr);
 		
 		sr.admitAll();
-		
 		feedbackScheduler.run();
 		
 		
@@ -51,7 +51,7 @@ public class Main {
 	//public void start(Stage primaryStage) throws Exception {
 		
 	private static File orderFile(File file)  {
-		
+		int lastId = 0;
 		PrintWriter writer;
 		Scanner sc;
 		Process process = null;
@@ -64,6 +64,7 @@ public class Main {
 			while (true){
 				process = auxRow.getNextProcess();
 				if (process == null) break;
+				process.setId(++lastId);
 				writer.println(process.decode());
 				process = null;
 			}
@@ -164,11 +165,13 @@ public class Main {
 						for (int j = 0; j < Integer.parseInt(infos[i]); j++)
 							newProcess.setResources(new Resource("CD"));
 					}else if(i==8){
-						newProcess.id = Integer.parseInt(infos[i]) + 1;
+						newProcess.setId(Integer.parseInt(infos[i]));
 					}
 					
 				}
-				sr.submit(newProcess);
+				// ignore zero timed processes
+				if (newProcess.getTimeLeft() > 0)
+					sr.submit(newProcess);
 			}
 			sc.close();
 			return true;
@@ -180,8 +183,8 @@ public class Main {
 	
 	// TODO Process Arrival time
 	// TODO We need to have 2 schedulers instead of 1 implementing 2 policies
-	// TODO Escalonators need to be multi programmed, not sequencial
-	// TODO CPU's can be sequencial, there's no need for multiprgrammed CPU's
+	// TODO Schedulers need to be multiprogrammed, not sequential
+	// TODO CPU's can be sequential, there's no need for multiprogrammed CPU's
 	// TODO	Aloca��o de mem�ria apropriada (finished process isn't being seen on LRU)
 	// TODO suspended processes
 	// TODO Manipula��o de processos em paralelo usando threads

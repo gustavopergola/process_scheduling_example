@@ -8,14 +8,9 @@ public class CPU{
 	public CPU (int coreId) {
 		this.coreId = coreId;
 	}
-
-	public void execute(Process process)  {
-		// TODO checar se é preemptivo para FCFS
-		// TODO deixar de deixar sempre vazio
-		if (process != null){
-			if (process.getTimeLeft() > 0) process.setTimeLeft(process.getTimeLeft() - 1);
-		}
-			
+	
+	public int getCoreId(){
+		return this.coreId;
 	}
 	
 	public boolean empty (){
@@ -30,4 +25,22 @@ public class CPU{
 		return "CPU" + this.coreId;
 	}
 	
+	public void execute()  {
+		if (executing != null){
+			
+			executing.setTimeLeft(executing.getTimeLeft() - 1);
+			
+			System.out.printf("\tCPU%d: %s %d", this.coreId, this.executing.toString(), this.executing.getTimeLeft());
+			
+			if (executing.getTimeLeft() <= 0){
+				executing = null;
+			}
+		}else {
+			System.out.printf("\tCPU%d: XX", this.coreId);
+		}
+	}
+	
+	public void setExecuting (Process process){
+		this.executing = process;
+	}
 }

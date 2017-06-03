@@ -61,6 +61,17 @@ public class ProcessList {
 		return null;
 	}
 	
+	public Process get (int index){
+		ProcessNode aux = first;
+		while (aux != null){
+			if (index == 1)
+				return aux.process;
+			else 
+				aux = aux.next;
+		}
+		return null;
+	}
+	
 	public Process pop(){
 		if (first == null) return null;
 		
@@ -71,7 +82,6 @@ public class ProcessList {
 			first = first.next;
 		
 		return process;
-		
 		
 	}
 

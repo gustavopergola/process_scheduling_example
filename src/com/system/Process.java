@@ -11,6 +11,7 @@ public class Process {
 	public int id = 0; 
 	public int lastTimeUsed = 0;
 	public boolean executing;
+	public boolean firstQuantum = true;
 	
 	
 	public Process(){
@@ -132,9 +133,7 @@ public class Process {
 		if (!resources.get(4).getName().equals("nulo")) CDs++;
 		if (!resources.get(5).getName().equals("nulo")) CDs++;
 		resp +=  CDs + ", ";
-		
-		resp += priority + "";
-		
+		resp += id + "";
 		return resp;
 	}
 
