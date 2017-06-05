@@ -16,7 +16,7 @@ public class SubmissionRow extends Row {
 	}
 	
 	public void admitAll(){
-		while (super.getList().getFirst() != null)
+		while (super.getList().getFirst() != null){
 			if (super.getList().getFirstProcess() != null)
 				// checks if process already arrived (simulated)
 				if (super.getList().getFirstProcess().getArrivalTime() <= this.feedbackScheduler.getProcessor().getClock()){
@@ -27,7 +27,7 @@ public class SubmissionRow extends Row {
 				}else {
 					break;
 				}
-				
+		}		
 	}
 	
 }

@@ -32,26 +32,24 @@ public class Main {
 		FCFSScheduler fcfsScheduler = new FCFSScheduler(processor);
 		SubmissionRow sr = new SubmissionRow(feedbackScheduler, fcfsScheduler);
 		processor.setSubmissionRow(sr);
+		processor.setFeedbackScheduler(feedbackScheduler);
+		processor.setFCFSScheduler(fcfsScheduler);
 		
 		readFile(orderFile(new File ("file.txt")), sr);
 		
 		sr.admitAll();
-		fcfsScheduler.run();
-		
-		
-		/**Thread feedbackThread = new Thread (feedbackScheduler);
-		feedbackThread.start();
 		
 		Thread fcfsThread = new Thread (fcfsScheduler);
-		fcfsThread.start();**/
-	
+		fcfsThread.start();
 		
+		Thread feedbackThread = new Thread (feedbackScheduler);
+		feedbackThread.start();
+	
 	}
 
 	//public void start(Stage primaryStage) throws Exception {
 		
 	private static File orderFile(File file)  {
-		int lastId = 0;
 		PrintWriter writer;
 		Scanner sc;
 		Process process = null;
@@ -64,7 +62,6 @@ public class Main {
 			while (true){
 				process = auxRow.getNextProcess();
 				if (process == null) break;
-				process.setId(++lastId);
 				writer.println(process.decode());
 				process = null;
 			}
@@ -118,6 +115,7 @@ public class Main {
 
 	private static boolean readFile(File file, Row sr){
 		// Lets consider a perfect file: if it exists, there's no syntax error or whatsoever
+		int lastId = 0;
 		try {
 			Scanner sc = new Scanner(file);
 			while (sc.hasNextLine()){
@@ -168,6 +166,9 @@ public class Main {
 						newProcess.setId(Integer.parseInt(infos[i]));
 					}
 					
+				}
+				if (newProcess.getId() == 0){
+					newProcess.setId(++lastId);
 				}
 				// ignore zero timed processes
 				if (newProcess.getTimeLeft() > 0)

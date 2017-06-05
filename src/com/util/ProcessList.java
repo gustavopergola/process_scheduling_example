@@ -13,8 +13,10 @@ public class ProcessList {
 		}else {
 			ProcessNode auxNode = first.next;
 			if (auxNode != null){ 
-				while (auxNode.next != null)
+				while (auxNode.next != null){
 					auxNode = auxNode.next;
+				}
+					
 				auxNode.next = node;
 				return node;
 			}else {
@@ -84,10 +86,15 @@ public class ProcessList {
 		return process;
 		
 	}
+	
+	public Process isEmpty(){
+		if (this.first == null) return null;
+		return this.first.process;
+	}
 
 	public Process getNextProcess() {
-		ProcessNode aux = this.first;
 		if (this.first == null) return null;
+		ProcessNode aux = this.first;
 		Process first = this.first.process;
 		while (aux != null){
 			if (aux.process.getArrivalTime() < first.getArrivalTime()){

@@ -10,8 +10,7 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 	private Processor processor;
 	private Process process = null;
 	private CPU freeCPU = null;
-	private boolean firstQuantum = true;
-	private boolean stopFlag = false;
+	public boolean stopFlag = false;
 	
 	public FeedbackScheduler (Processor processor) {
 		super();
@@ -55,21 +54,6 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 		
 		/** returns process **/
 		return aux;
-	
-		// backup
-		/**Process process = null;
-
-		for (int i= 0; i < userQueue.size(); i++ ){
-			
-			process = userQueue.get(i).getList().pop();
-			
-			// troca de fila
-			if (jump){
-				
-			}
-			if (process != null) return process;
-		}
-		return null;**/
 	}
 	
 	private void skipRow(Process process){
@@ -117,34 +101,46 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 	@Override
 	public void run (){
 		
-		// checks if there is a free CPU avaiable
-		freeCPU = this.processor.getFreeCPU();
 		
-		if (freeCPU != null){
-			// if tehere's a free CPU available check if there's still a process to be executed
-			int n = 1;
+		boolean hasProcess = true;
+		
+		while (hasProcess){
+			// checks if there is a free CPU avaiable
+			freeCPU = this.processor.getFreeCPU();
+			if (freeCPU == null) break;
 			
-			while (true){
-				process = this.request(n);
-				if (process != null){
-					// if there's a process at user queue, check if the same process isn't being executed already at a CPU
-					if (this.processor.searchProcess(process) == true){
-						// if it is, get another one
-						n++;
+			if (freeCPU != null){
+				// if tehere's a free CPU available check if there's still a process to be executed
+				int n = 1;
+				
+				while (true){
+					process = this.request(n);
+					
+					if (process != null){
+						if (process.getTimeLeft() != 0){
+							// if there's a process at user queue, check if the same process isn't being executed already at a CPU
+							if (this.processor.searchProcess(process) == true){
+								// if it is, get another one
+								n++;
+							}else {
+								// if it isn't, we found the process which has priority in being executed, finally
+								freeCPU.setExecuting(process);
+								// skip the process row at the user queue
+								skipRow(process);
+								break;
+							}
+						}else {
+							n++;
+						}
 					}else {
-						// if it isn't, we found the process which has priority in being executed, finally
-						freeCPU.setExecuting(process);
-						// skip the process row at the user queue
-						skipRow(process);
+						// there is no process at user queue, break the iteration
+						hasProcess = false;
 						break;
 					}
-				}else {
-					// there is no process at user queue, break the iteration
-					break;
 				}
+			}else {
+				// there's no CPU available so we do nothing because FCFS has priority
 			}
-		}else {
-			// there's no CPU avaiable so we do nothing because FCFS has priority
 		}
 		
 		// tenta pular o clock (É protegido pelo processor para que esteja sincronizado)
@@ -154,15 +150,14 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 		while (this.clean()){}
 		
 		try {
-			Thread.sleep(900);
+			Thread.sleep(5);
 			if (this.processor != null){
 				if (this.processor.getSubmissionRow() != null){
 					// checks if submission row is empty
 					// checks if all queues are empty
-					// TODO break execution
 					if (this.processor.getSubmissionRow().size() <= 0){
 						if (this.userQueue.get(0).size() <= 0 && this.userQueue.get(1).size() <= 0 && this.userQueue.get(2).size() <= 0){
-								stopFlag = true;
+							stopFlag = true;
 						}
 					}
 				}
@@ -171,8 +166,11 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 			// recursive call
 			if (!stopFlag)
 				run ();
-			else 
+			else {
 				System.out.println("User requests ended");
+				Thread.currentThread().interrupt();
+			}
+				
 				
 			
 		} catch (InterruptedException e) {

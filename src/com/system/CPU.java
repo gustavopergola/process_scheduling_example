@@ -32,7 +32,7 @@ public class CPU{
 			
 			System.out.printf("\tCPU%d: %s %d", this.coreId, this.executing.toString(), this.executing.getTimeLeft());
 			
-			if (executing.getTimeLeft() <= 0 || executing.firstQuantum == true){
+			if (executing.getTimeLeft() <= 0 || (executing.firstQuantum == true && executing.getPriority() != 0)){
 				executing = null;
 			}
 		}else {
@@ -42,5 +42,14 @@ public class CPU{
 	
 	public void setExecuting (Process process){
 		this.executing = process;
+	}
+
+	public void interrupt() {
+		if (this.executing != null){
+			if (this.executing.getPriority() >= 0){
+				this.executing.firstQuantum = true; //recover quantum in case we interrupt in the middle of the execution
+				this.executing = null;
+			}
+		}
 	}
 }

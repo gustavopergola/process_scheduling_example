@@ -10,6 +10,8 @@ public class Processor {
 	public boolean fcfsDone = true;
 	public boolean feedbackDone = true;
 	private SubmissionRow sr = null;
+	private FeedbackScheduler userScheduler;
+	private FCFSScheduler realTimeScheduler;
 	
 	public Processor (int cores){
 		if (cores <= 0) 
@@ -29,6 +31,13 @@ public class Processor {
 	
 	public int getNumberOfCores (){
 		return cpuList.size();
+	}
+	
+	public boolean isEmpty(){
+		for (int i = 0; i < cpuList.size(); i++)
+			if (!cpuList.get(i).empty())
+				return false;
+		return true;
 	}
 	
 	public CPU getFreeCPU (){
@@ -51,15 +60,14 @@ public class Processor {
 	
 	public void incrementClock(){
 		// check if all the schedulers are done
-		if (this.fcfsDone && this.feedbackDone){
-			this.fcfsDone = true;
-			this.feedbackDone = false;
+		if (this.fcfsDone && this.feedbackDone || (this.realTimeScheduler.stopFlag || this.userScheduler.stopFlag)){
+			this.fcfsDone = this.realTimeScheduler.stopFlag;
+			this.feedbackDone = this.userScheduler.stopFlag;
 			this.clock++;
-			if (this.clock % 2 == 0){
+			
 				if(sr != null){
 					sr.admitAll();
 				}
-			}
 			
 			System.out.printf("CLOCK: %d", this.getClock());
 			
@@ -68,12 +76,31 @@ public class Processor {
 				cpuList.get(i).execute();
 			}
 			
-			
-			
 			System.out.printf("\n");
 				
 		}
 
+	}
+
+	public CPU getUserCPU() {
+		int leastPriority = 0;
+		for (int i = 0; i < cpuList.size(); i++){
+			if (!cpuList.get(i).empty()){
+				if (cpuList.get(i).getExecuting().getPriority() > leastPriority){
+					return cpuList.get(i);
+				}
+			}
+		}
+			
+		return null;
+	}
+
+	public void setFeedbackScheduler(FeedbackScheduler feedbackScheduler) {
+		this.userScheduler = feedbackScheduler;
+	}
+	
+	public void setFCFSScheduler(FCFSScheduler fcfsScheduler) {
+		this.realTimeScheduler = fcfsScheduler;
 	}
 }
 

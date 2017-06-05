@@ -11,7 +11,7 @@ public class Process {
 	public int id = 0; 
 	public int lastTimeUsed = 0;
 	public boolean executing;
-	public boolean firstQuantum = false; // TODO treat CPU loss bc of FCFS
+	public boolean firstQuantum = false; // it's false bc smth sets this inverse at the start i'm not sure why
 	
 	
 	public Process(){
