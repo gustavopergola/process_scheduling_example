@@ -35,8 +35,11 @@ public class CPU{
 			System.out.printf("\tCPU%d: %s %d", this.coreId, this.executing.toString(), this.executing.getTimeLeft());
 			
 			if (executing.getTimeLeft() <= 0 || (executing.firstQuantum == true && executing.getPriority() != 0)){
-				if (executing.getTimeLeft() <= 0)
+				if (executing.getTimeLeft() <= 0){
 					this.processor.memory.remove(executing);
+					executing.state = "finished";
+				}
+					
 				executing = null;
 			}
 		}else {

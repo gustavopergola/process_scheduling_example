@@ -14,44 +14,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 	
 	Scene scene1, scene2;
+	boolean fileSelected = false;
 	public static void main(String[] args) {
-
-		
-		
 		launch(args);
-		
-		
-		
-		Processor processor = new Processor (4);
-		Memory memory = new Memory ();
-		FeedbackScheduler feedbackScheduler = new FeedbackScheduler(processor, memory);
-		FCFSScheduler fcfsScheduler = new FCFSScheduler(processor, memory);
-		SubmissionRow sr = new SubmissionRow(feedbackScheduler, fcfsScheduler);
-		
-		processor.setSubmissionRow(sr);
-		processor.setMemory(memory);
-		
-		memory.setFeedbackScheduler(feedbackScheduler);
-		
-		readFile(orderFile(new File ("file.txt")), sr);
-		
-		sr.admitAll();
-		
-		Thread fcfsThread = new Thread (fcfsScheduler);
-		fcfsThread.start();
-		
-		Thread feedbackThread = new Thread (feedbackScheduler);
-		feedbackThread.start();
-	
 	}
-
-	//public void start(Stage primaryStage) throws Exception {
 		
 	private static File orderFile(File file)  {
 		PrintWriter writer;
@@ -81,41 +54,85 @@ public class Main extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-
+		Logger.generateLogFile();
+		
+		Processor processor = new Processor (4);
+		Memory memory = new Memory ();
+		FeedbackScheduler feedbackScheduler = new FeedbackScheduler(processor, memory);
+		FCFSScheduler fcfsScheduler = new FCFSScheduler(processor, memory);
+		SubmissionRow sr = new SubmissionRow(feedbackScheduler, fcfsScheduler);
+		
+		processor.setSubmissionRow(sr);
+		processor.setMemory(memory);
+		
+		memory.setFeedbackScheduler(feedbackScheduler);
 		
 		primaryStage.setTitle("Scheduler");
 		
-		
 		// First Scene
 		Label label1 = new Label("Select your process file");
-		Button button1 = new Button();
+		Button button1 = new Button(); 
 		button1.setText("Select TXT File");
+		
+		Button button2 = new Button();
+		button2.setText("Start Simulation");
+		button2.setTextFill(Color.INDIANRED);
+		
+		Button button3 = new Button();
+		button3.setText("Open Log Window");
+		
+		Button button4 = new Button();
+		button4.setText("Open Processor Window");
+		
+		Button button5 = new Button();
+		button5.setText("Open Queues Window");
+		
+		
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open TXT File");
 		
-		VBox layout1 = new VBox(20);
-		layout1.getChildren().addAll(label1, button1);
+		VBox layout1 = new VBox(10);
+		layout1.getChildren().addAll(label1, button1, button2, button3, button4, button5);
 		layout1.setAlignment(Pos.CENTER);
 		
-		/**button1.setOnAction(e -> {
-			if (readFile(fileChooser.showOpenDialog(primaryStage), scheduler)){
-				// Display rows
-				RowWindow.display(scheduler);
-				
-			}else {
-				// Show error message in case there is smth wrong with the file
-				Label labelError = new Label ("Impossible to read from this file!");	
-				layout1.getChildren().add(labelError);
-				
+		button1.setOnAction(e -> {
+			if (!fileSelected){
+				if (readFile(orderFile(fileChooser.showOpenDialog(primaryStage)), sr)){
+					fileSelected = true;
+					// Display rows
+					
+				}else {
+					// Show error message in case there is smth wrong with the file
+					Label labelError = new Label ("Impossible to read from this file!");	
+					layout1.getChildren().add(labelError);
+					
+				}
 			}
-			System.out.println(scheduler.toString());
-		});	**/
+			
+		});
+		
+		button2.setOnAction(e -> {
+			if (fileSelected){
+				sr.admitAll();
+				
+				Thread fcfsThread = new Thread (fcfsScheduler);
+				fcfsThread.start();
+				
+				Thread feedbackThread = new Thread (feedbackScheduler);
+				feedbackThread.start();
+			}
+		});
+		
+		button3.setOnAction(e -> LogWindow.display());
+		
+		button4.setOnAction(e -> CPUWindow.display(processor));
+		
+		button5.setOnAction(e -> RowWindow.display(sr, feedbackScheduler, fcfsScheduler));
 		
 		scene1 = new Scene(layout1, 300, 250);
 	
 		primaryStage.setScene(scene1);
 		primaryStage.show();
-		
 	}
 
 	private static boolean readFile(File file, Row sr){
@@ -176,8 +193,11 @@ public class Main extends Application {
 					newProcess.setId(++lastId);
 				}
 				// ignore zero timed processes
-				if (newProcess.getTimeLeft() > 0)
+				if (newProcess.getTimeLeft() > 0){
+					newProcess.state = "new";
 					sr.submit(newProcess);
+				}
+					
 			}
 			sc.close();
 			return true;
@@ -186,7 +206,5 @@ public class Main extends Application {
 			return false;
 		}
 	}
-	
-	// TODO Tratamento de recursos
 }
 

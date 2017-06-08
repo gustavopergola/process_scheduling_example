@@ -15,6 +15,7 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 	private ArrayList <Resource> resources;
 	
 	public FeedbackScheduler (Processor processor, Memory memory) {
+		
 		super();
 		userQueue.add(new Row());
 		userQueue.add(new Row());
@@ -38,6 +39,14 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 	
 	public Row getUserQueue (int id){
 		return userQueue.get(id - 1);
+	}
+	
+	public Row getSuspended (){
+		Row aux = new Row ();
+		for (int i = suspended.size()-1; i >= 0; i--){
+			aux.submit(suspended.get(i));
+		}
+		return aux;
 	}
 	
 	private Process request(int n){
@@ -85,15 +94,33 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 					setResourcesState(process.getResources(), true);
 					
 				}else {
+					boolean found = false;
+					for (int i = 0; i < suspended.size(); i++){
+						if(suspended.get(i).equals(process)){
+							found = true;
+							break;
+						}
+					}
+					if (!found){
+						this.suspended.add(process);
+						process.state = "suspended";
+					}
+					return false;
+				}
+			}else {
+				boolean found = false;
+				for (int i = 0; i < suspended.size(); i++){
+					if(suspended.get(i).equals(process)){
+						found = true;
+						break;
+					}
+				}
+				if (!found){
 					this.suspended.add(process);
 					process.state = "suspended";
 				}
-			}else {
-				this.suspended.add(process);
-				process.state = "suspended";
+				return false;
 			}
-			
-			
 			return true;
 		}
 		return false;
@@ -108,9 +135,7 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 						if (resources.get(j).isWorking == !state) resources.get(j).isWorking = state;
 						lastName = resources.get(j).getName();
 					}
-					 
 				}
-				
 				
 				boolean two = false;
 				// check if it has more than one request of this resource type
@@ -123,7 +148,6 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 				}
 				
 				if (two){
-					
 					// checks if next resource is also available
 					if(j + 1 < resources.size()){
 						//it's not out of bounds so lets check availability
@@ -184,9 +208,6 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 							i++; // jump process resource bc we already checked
 						}
 					}
-						
-					
-					
 				}
 			}
 		}
@@ -239,13 +260,12 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 	@Override
 	public void run (){
 			if (this.processor.fcfsDone == true){
-				
 				swapInIfPossible();
 				
 				boolean hasProcess = true;
 				
 				while (hasProcess){
-					// checks if there is a free CPU avaiable
+					// checks if there is a free CPU available
 					freeCPU = this.processor.getFreeCPU();
 					if (freeCPU == null) break;
 					
@@ -288,6 +308,7 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 				this.processor.incrementClock();
 				
 				while (this.clean()){}
+				
 		}
 		
 		try {

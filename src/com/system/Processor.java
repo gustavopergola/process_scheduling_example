@@ -7,7 +7,7 @@ import com.rowHandler.SubmissionRow;
 public class Processor {
 	
 	private ArrayList <CPU> cpuList = new ArrayList <CPU> (4);
-	private int clock = 0;
+	static private int clock = 0;
 	public boolean fcfsDone = false;
 	public boolean feedbackDone = false;
 	private SubmissionRow sr = null;
@@ -21,7 +21,6 @@ public class Processor {
 			cores = 1;
 		for (int i = 0; i < cores; i++) 
 			cpuList.add(new CPU(i + 1, this));
-		
 	}
 	
 	public void setMemory (Memory memory){
@@ -54,7 +53,7 @@ public class Processor {
 		return null;
 	}
 	
-	public int getClock (){
+	static public int getClock (){
 		return clock;
 	}
 	
@@ -71,7 +70,7 @@ public class Processor {
 			this.fcfsDone = false;
 			this.feedbackDone = false;
 			
-			this.clock++;
+			clock++;
 			
 			this.memory.fixFragmentation();
 			
@@ -79,12 +78,12 @@ public class Processor {
 				sr.admitAll();
 			}
 			
-			System.out.printf("CLOCK: %d", this.getClock());
+			System.out.printf("CLOCK: %d", Processor.getClock());
 			
 			// execute CPU's 
 			for (int i = 0; i < cpuList.size(); i++){
 				if (cpuList.get(i).getExecuting() != null)
-					cpuList.get(i).getExecuting().lastTimeUsed = this.clock;
+					cpuList.get(i).getExecuting().lastTimeUsed = Processor.clock;
 				cpuList.get(i).execute();
 			}
 			
@@ -124,6 +123,9 @@ public class Processor {
 		return null;
 	}
 
+	public ArrayList<CPU> getCPUList(){
+		return this.cpuList;
+	}
 
 }
 
