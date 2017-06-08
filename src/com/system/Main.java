@@ -8,23 +8,23 @@ import java.util.Scanner;
 import com.rowHandler.Row;
 import com.rowHandler.SubmissionRow;
 
-/**import javafx.application.Application;
+import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;**/
+import javafx.stage.Stage;
 
-public class Main {
+public class Main extends Application {
 	
-	//Scene scene1, scene2;
+	Scene scene1, scene2;
 	public static void main(String[] args) {
 
-		// test: suspension
 		
-		//launch(args);
+		
+		launch(args);
 		
 		
 		
@@ -78,8 +78,10 @@ public class Main {
 		return new File ("orderedProcesses.txt");
 		
 	}
+	
+	@Override
+	public void start(Stage primaryStage) throws Exception {
 
-		/**Scheduler scheduler = new Scheduler ();
 		
 		primaryStage.setTitle("Scheduler");
 		
@@ -95,7 +97,7 @@ public class Main {
 		layout1.getChildren().addAll(label1, button1);
 		layout1.setAlignment(Pos.CENTER);
 		
-		button1.setOnAction(e -> {
+		/**button1.setOnAction(e -> {
 			if (readFile(fileChooser.showOpenDialog(primaryStage), scheduler)){
 				// Display rows
 				RowWindow.display(scheduler);
@@ -107,14 +109,14 @@ public class Main {
 				
 			}
 			System.out.println(scheduler.toString());
-		});	
+		});	**/
 		
 		scene1 = new Scene(layout1, 300, 250);
 	
 		primaryStage.setScene(scene1);
-		primaryStage.show();**/
+		primaryStage.show();
 		
-	//}
+	}
 
 	private static boolean readFile(File file, Row sr){
 		// Lets consider a perfect file: if it exists, there's no syntax error or whatsoever
