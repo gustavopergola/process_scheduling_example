@@ -1,16 +1,10 @@
 package com.system;
 
-import java.util.ArrayList;
-
 import com.rowHandler.Row;
-import com.rowHandler.SubmissionRow;
-import com.rowHandler.UserRow;
-import com.util.MemoryList;
 
 public abstract class Scheduler{
 		protected int lastId = 0;
 		protected int quantum = 2;
-		protected MemoryList memory = new MemoryList ();
 		protected int admitDelay = 4;
 		
 		protected Row fcfsQueue = new Row();

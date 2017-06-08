@@ -2,8 +2,6 @@
 
 import com.system.FCFSScheduler;
 import com.system.FeedbackScheduler;
-import com.system.Process;
-import com.system.Scheduler;
 
 public class SubmissionRow extends Row {
 	private FeedbackScheduler feedbackScheduler;
@@ -31,3 +29,5 @@ public class SubmissionRow extends Row {
 	}
 	
 }
+
+// estados: suspenso, bloqueado, pronto, novo, terminado

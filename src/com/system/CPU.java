@@ -4,9 +4,11 @@ public class CPU{
 	private Process executing;
 	private int coreId;
 	int quantumCounter;
+	private Processor processor;
 	
-	public CPU (int coreId) {
+	public CPU (int coreId, Processor processor) {
 		this.coreId = coreId;
+		this.processor = processor;
 	}
 	
 	public int getCoreId(){
@@ -26,13 +28,15 @@ public class CPU{
 	}
 	
 	public void execute()  {
+		
 		if (executing != null){
-			
 			executing.setTimeLeft(executing.getTimeLeft() - 1);
 			
 			System.out.printf("\tCPU%d: %s %d", this.coreId, this.executing.toString(), this.executing.getTimeLeft());
 			
 			if (executing.getTimeLeft() <= 0 || (executing.firstQuantum == true && executing.getPriority() != 0)){
+				if (executing.getTimeLeft() <= 0)
+					this.processor.memory.remove(executing);
 				executing = null;
 			}
 		}else {

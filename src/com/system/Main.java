@@ -3,8 +3,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.text.Format;
-import java.util.Locale;
 import java.util.Scanner;
 
 import com.rowHandler.Row;
@@ -22,18 +20,24 @@ import javafx.stage.Stage;**/
 public class Main {
 	
 	//Scene scene1, scene2;
-	
-	
 	public static void main(String[] args) {
 
+		// test: suspension
+		
 		//launch(args);
+		
+		
+		
 		Processor processor = new Processor (4);
-		FeedbackScheduler feedbackScheduler = new FeedbackScheduler(processor);
-		FCFSScheduler fcfsScheduler = new FCFSScheduler(processor);
+		Memory memory = new Memory ();
+		FeedbackScheduler feedbackScheduler = new FeedbackScheduler(processor, memory);
+		FCFSScheduler fcfsScheduler = new FCFSScheduler(processor, memory);
 		SubmissionRow sr = new SubmissionRow(feedbackScheduler, fcfsScheduler);
+		
 		processor.setSubmissionRow(sr);
-		processor.setFeedbackScheduler(feedbackScheduler);
-		processor.setFCFSScheduler(fcfsScheduler);
+		processor.setMemory(memory);
+		
+		memory.setFeedbackScheduler(feedbackScheduler);
 		
 		readFile(orderFile(new File ("file.txt")), sr);
 		
@@ -51,7 +55,6 @@ public class Main {
 		
 	private static File orderFile(File file)  {
 		PrintWriter writer;
-		Scanner sc;
 		Process process = null;
 		Row auxRow = new Row();
 		
@@ -182,16 +185,6 @@ public class Main {
 		}
 	}
 	
-	// TODO Process Arrival time
-	// TODO We need to have 2 schedulers instead of 1 implementing 2 policies
-	// TODO Schedulers need to be multiprogrammed, not sequential
-	// TODO CPU's can be sequential, there's no need for multiprogrammed CPU's
-	// TODO	Aloca��o de mem�ria apropriada (finished process isn't being seen on LRU)
-	// TODO suspended processes
-	// TODO Manipula��o de processos em paralelo usando threads
-	// TODO Planejamento geral do escalonador de feedback FCFS
 	// TODO Tratamento de recursos
-	
-	
 }
 

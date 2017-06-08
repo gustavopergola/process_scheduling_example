@@ -11,7 +11,8 @@ public class Process {
 	public int id = 0; 
 	public int lastTimeUsed = 0;
 	public boolean executing;
-	public boolean firstQuantum = false; // it's false bc smth sets this inverse at the start i'm not sure why
+	public boolean firstQuantum = false; // it's false bc smth sets this inverse at the start i'm not sure why or where
+	public String state = "new";
 	
 	
 	public Process(){
@@ -57,11 +58,11 @@ public class Process {
 		if (resource.getName().equals("Printer")){
 			// checks for first printer
 			if (resources.get(0).getName().equals("nulo")){
-				resources.add(0, resource);
+				resources.get(0).setName("Printer");
 				return true;
 			//checks for second printer
 			}else if (resources.get(1).getName().equals("nulo")) {
-				resources.add(1, resource);
+				resources.get(1).setName("Printer");
 				return true;
 			}else {
 				return false;
@@ -69,7 +70,7 @@ public class Process {
 		}else if(resource.getName().equals("Scanner")){
 			// checks for first scanner
 			if (resources.get(2).getName().equals("nulo")){
-				resources.add(2, resource);
+				resources.get(2).setName("Scanner");
 			}else {
 				return false;
 			}
@@ -77,7 +78,7 @@ public class Process {
 		}else if(resource.getName().equals("Modem")){
 			// checks for first modem
 			if (resources.get(3).getName().equals("nulo")){
-				resources.add(3, resource);
+				resources.get(3).setName("Modem");
 			}else {
 				return false;
 			}
@@ -87,10 +88,10 @@ public class Process {
 			
 			// checks for first CD
 			if (resources.get(4).getName().equals("nulo")){
-				resources.add(4, resource);
+				resources.get(4).setName("CD");
 			//checks for second CD
 			}else if (resources.get(5).getName().equals("nulo")) {
-				resources.add(5, resource);
+				resources.get(5).setName("CD");
 			}else {
 				return false;
 			}

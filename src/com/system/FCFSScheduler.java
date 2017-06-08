@@ -1,7 +1,5 @@
 package com.system;
 
-import java.util.ArrayList;
-
 import com.rowHandler.Row;
 
 public class FCFSScheduler extends Scheduler implements Runnable {
@@ -9,16 +7,18 @@ public class FCFSScheduler extends Scheduler implements Runnable {
 	private Process process = null;
 	private Processor processor;
 	private CPU freeCPU = null;
-	public boolean stopFlag = false;
+	public Memory memory;
 	
-	public FCFSScheduler (Processor processor){
+	public FCFSScheduler (Processor processor, Memory memory){
 		super();
 		this.processor = processor;
+		this.memory = memory;
 	}
 	
 	public boolean submit (Process process){
 		if (process != null){
-			// TODO CHECK MEMORY SPACE
+			memory.insertRealTimeRequest(process);
+			process.state = "ready";
 			fcfsQueue.submit(process);
 			return true;
 		}
@@ -29,16 +29,8 @@ public class FCFSScheduler extends Scheduler implements Runnable {
 		return this.fcfsQueue;
 	}
 	
-	
 	@Override
 	public void run (){
-		// case 1: free cpu available with 1 process OK!
-		// case 2: free cpu available with multiple processes OK!
-		// case 3: no cpu available (feedback processes) with 1 process OK!
-		// case 4: no cpu available (fcfs processes) with 1 process OK!
-		// case 5: no cpu available (fcfs processes) with multiple processes OK!
-		// case 6: no cpu available (feedback processes) with multiple processes OK!
-		
 		process = fcfsQueue.getList().isEmpty();
 		
 		while(process != null){ // there's at least one process that needs to be executed at real time
@@ -61,22 +53,21 @@ public class FCFSScheduler extends Scheduler implements Runnable {
 					break;
 				}
 			}
-			
 			process = fcfsQueue.getList().isEmpty();
 		}
 		this.processor.fcfsDone = true;
-		this.processor.incrementClock();
+		this.processor.incrementClock();		
 		
 		try {
-			Thread.sleep(5);
+			Thread.sleep(1002);
 			if (this.processor.getSubmissionRow().size() <= 0){
 				if (this.fcfsQueue.size() <= 0){
 					if (this.processor.isEmpty())
-						stopFlag = true;
+						this.processor.fcfsStopFlag = true;
 				}
 			}
 			
-			if (!this.stopFlag)
+			if ((!this.processor.feedbackStopFlag) || (!this.processor.fcfsStopFlag))
 				run ();
 			else{
 				System.out.println("Real Time requests ended");
@@ -88,11 +79,6 @@ public class FCFSScheduler extends Scheduler implements Runnable {
 			e.printStackTrace();
 		
 		}
-		
-		
-		// check free CPU
-		// interrupts if needed
-		// execute process until it ends
 		
 	}
 }

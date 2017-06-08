@@ -14,12 +14,15 @@ public class MemoryList {
 			avaiableSpace.size -= process.getSize();
 			
 			MemoryNode processMemoryNode = new MemoryNode(process.getSize());
+			processMemoryNode.process = process;
 			
 			processMemoryNode.previous = avaiableSpace.previous;
 			processMemoryNode.next = avaiableSpace;
 			
 			if (avaiableSpace.previous != null){
 				avaiableSpace.previous.next = processMemoryNode;
+			}else {
+				this.first = processMemoryNode;
 			}
 			
 			avaiableSpace.previous = processMemoryNode;
@@ -31,6 +34,28 @@ public class MemoryList {
 		
 	}
 
+	public void fixFragmentation(){
+		boolean flag = true;
+		while (flag){
+			flag = false;
+			MemoryNode aux = this.first;
+			while (aux != null){
+				if (aux.process == null){
+					if (aux.next != null){
+						if (aux.next.process == null){
+							flag = true;
+							aux.size += aux.next.size;
+							// remove next manually without incrementing size
+							if (aux.next.next != null) aux.next.next.previous = aux;
+							aux.next = aux.next.next;
+						}
+					}
+				}
+				aux = aux.next;
+			}
+		}
+	}
+	
 	public void removeProcess (MemoryNode node){
 		if (node == null)
 			return;
@@ -46,18 +71,21 @@ public class MemoryList {
 				node.next.previous = node.previous;
 				if(node.previous != null)
 					node.previous.next = node.next;
-				return;
-			}
+				else
+					this.first = node.next;
+				node = node.next;
+			}	
 		}
+		
 		if (node.previous != null){
 			if (node.previous.process == null){
 				node.previous.size += node.size;
 				node.previous.next = node.next;
 				if(node.next != null)
 					node.next.previous = node.previous;
-				return;
 			}
 		}	
+		
 	}
 	
 	public void removeProcess (Process process){
@@ -84,8 +112,6 @@ public class MemoryList {
 			}
 			return search(process, node.next);
 		}
-		
-		
 	}
 
 	public MemoryNode checkSizeAvailability(int size){
@@ -108,5 +134,29 @@ public class MemoryList {
 		
 	}
 	
+	public String toString(){
+		String aux = "";
+		MemoryNode node = this.first;
+		while (node != null){
+			if (node.process != null){
+				aux += node.size + "(" + node.process.toString() + ")-> ";
+			}else {
+				aux += node.size + "-> ";
+			}
+			node = node.next;
+		}
+		aux += "\n";
+		node = this.first;
+		while (node.next != null) node = node.next;
+		while (node != null){
+			if (node.process != null){
+				aux += node.size + "(" + node.process.toString() + ")-> ";
+			}else {
+				aux += node.size + "-> ";
+			}
+			node = node.previous;
+		}
+		return aux;
+	}
 	
 }
