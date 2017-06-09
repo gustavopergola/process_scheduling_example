@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 public class CPUWindow {
 	public static void display(Processor processor) {
 		Stage window = new Stage ();
-		window.setTitle("CPU window");
+		window.setTitle("Processor window");
 		window.setMinWidth(250);
 		window.setMinHeight(200);
 		

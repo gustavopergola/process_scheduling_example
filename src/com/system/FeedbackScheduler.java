@@ -33,6 +33,10 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 		resources.add(new Resource("CD")); //5 second CD	
 	}
 	
+	public ArrayList <Resource> getResources(){
+		return this.resources;
+	}
+	
 	public Processor getProcessor (){
 		return this.processor;
 	}
@@ -79,9 +83,13 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 	
 	private void skipRow(Process process){
 		for (int i = 0; i< userQueue.size(); i++){
-			if (userQueue.get(i).remove(process)) // checks in which row the process is before removing it
+			if (userQueue.get(i).remove(process)){
+				// checks in which row the process is before removing it
 				if (i + 1 >= userQueue.size()) userQueue.get(0).submit(process); // in case it's the last row
 				else userQueue.get(i + 1).submit(process);
+				//Logger.addLogLine(process.toString() + "changed feedback row.");
+			}
+				
 		}
 	}
 	
@@ -104,6 +112,7 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 					if (!found){
 						this.suspended.add(process);
 						process.state = "suspended";
+						Logger.addLogLine(process.toString() + "suspended due to lack of memory space!");
 					}
 					return false;
 				}
@@ -118,6 +127,7 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 				if (!found){
 					this.suspended.add(process);
 					process.state = "suspended";
+					Logger.addLogLine(process.toString() + "suspended due to lack of resource availability!");
 				}
 				return false;
 			}
@@ -230,7 +240,7 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 		process.state = "suspended";
 		process.firstQuantum = true;
 		this.processor.removeProcess(process);
-		System.out.println("Suspended " + process.toString());
+		Logger.addLogLine(process.toString() + " suspended due to real time priority!");
 	}
 	
 	private boolean clean() {
@@ -285,6 +295,7 @@ public class FeedbackScheduler extends Scheduler implements Runnable {
 									}else {
 										// if it isn't, we found the process which has priority in being executed, finally
 										freeCPU.setExecuting(process);
+										Logger.addLogLine(process.toString() + "is now beign executed by CPU" + freeCPU.getCoreId() + ".");
 										// skip the process row at the user queue
 										skipRow(process);
 										break;

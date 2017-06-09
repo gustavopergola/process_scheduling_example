@@ -9,10 +9,12 @@ import com.rowHandler.Row;
 import com.rowHandler.SubmissionRow;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
@@ -32,6 +34,7 @@ public class Main extends Application {
 		Row auxRow = new Row();
 		
 		try {
+			Logger.addLogLine("Generating new process file...");
 			readFile(file, auxRow);
 			
 			writer = new PrintWriter("orderedProcesses.txt", "UTF-8");
@@ -42,6 +45,7 @@ public class Main extends Application {
 				process = null;
 			}
 			writer.close();
+			Logger.addLogLine("New process file generated.");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
@@ -87,25 +91,38 @@ public class Main extends Application {
 		Button button5 = new Button();
 		button5.setText("Open Queues Window");
 		
+		Button button6 = new Button();
+		button6.setText("Open Resources Window");
+		
+		Button button7 = new Button ();
+		button7.setText("Open CPU Usage Window");
 		
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open TXT File");
 		
 		VBox layout1 = new VBox(10);
-		layout1.getChildren().addAll(label1, button1, button2, button3, button4, button5);
+		layout1.getChildren().addAll(label1, button1, button2, button3, button4, button5, button6, button7);
 		layout1.setAlignment(Pos.CENTER);
+		
+		HBox layout2 = new HBox(5);
+		Label clock = new Label("Program hasn't started yet!");
+		layout2.getChildren().addAll(clock);
+		layout2.setAlignment(Pos.TOP_LEFT);
+		
+		VBox main = new VBox(10);
+		main.getChildren().addAll(layout2, layout1);
+		main.setAlignment(Pos.TOP_LEFT);
+		
 		
 		button1.setOnAction(e -> {
 			if (!fileSelected){
 				if (readFile(orderFile(fileChooser.showOpenDialog(primaryStage)), sr)){
 					fileSelected = true;
-					// Display rows
-					
+					label1.setText("File Selected! You may start now.");
 				}else {
 					// Show error message in case there is smth wrong with the file
 					Label labelError = new Label ("Impossible to read from this file!");	
 					layout1.getChildren().add(labelError);
-					
 				}
 			}
 			
@@ -113,6 +130,7 @@ public class Main extends Application {
 		
 		button2.setOnAction(e -> {
 			if (fileSelected){
+				Logger.addLogLine("User Clicked Start");
 				sr.admitAll();
 				
 				Thread fcfsThread = new Thread (fcfsScheduler);
@@ -129,7 +147,28 @@ public class Main extends Application {
 		
 		button5.setOnAction(e -> RowWindow.display(sr, feedbackScheduler, fcfsScheduler));
 		
-		scene1 = new Scene(layout1, 300, 250);
+		button6.setOnAction(e -> ResourcesWindow.display(feedbackScheduler.getResources()));
+		
+		button7.setOnAction(e -> CPULogWindow.display());
+		
+		scene1 = new Scene(main, 300, 300);
+		
+		final Thread countThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+            	
+            	updateUI(clock);
+            	
+                try {
+					Thread.sleep(300);
+					run();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+            }
+        });
+        countThread.setDaemon(true);
+        countThread.start();
 	
 		primaryStage.setScene(scene1);
 		primaryStage.show();
@@ -206,5 +245,16 @@ public class Main extends Application {
 			return false;
 		}
 	}
+	
+	private static void updateUI(Label clock) {
+		Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+            	if (Processor.getClock() != 0)
+            		clock.setText(Processor.getClock() + "");
+            }
+		});
+	}
+            
 }
 

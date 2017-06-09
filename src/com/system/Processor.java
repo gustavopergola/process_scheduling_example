@@ -79,6 +79,7 @@ public class Processor {
 			}
 			
 			System.out.printf("CLOCK: %d", Processor.getClock());
+			Logger.addCPULogLine("CLOCK: " + Processor.getClock());
 			
 			// execute CPU's 
 			for (int i = 0; i < cpuList.size(); i++){
@@ -99,10 +100,8 @@ public class Processor {
 				}
 			}
 			
-			
 			System.out.printf("\n");
-			
-			//System.out.println(this.memory.toString());
+			Logger.addCPULogLine("\n");
 		}
 	}
 

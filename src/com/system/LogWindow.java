@@ -50,7 +50,7 @@ public class LogWindow {
 		layout.getChildren().addAll(label, list);
 		layout.setAlignment(Pos.TOP_CENTER);
 		
-		Scene scene = new Scene (layout, 300, 300);
+		Scene scene = new Scene (layout, 400, 350);
 		window.setScene(scene);
 		window.show();
 	}

@@ -12,10 +12,13 @@ public class Logger {
 	
 	static public void generateLogFile (){
 		PrintWriter writer;
+		PrintWriter writer2;
 		try {
 			writer = new PrintWriter("history.log", "UTF-8");
-			writer.println("Program started");
+			writer.println("Program initialized");
 			writer.close();
+			writer2 = new PrintWriter("CPUhistory.log", "UTF-8");
+			writer2.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
@@ -28,6 +31,14 @@ public class Logger {
 		try {
 			line += " at Clock: " + Processor.getClock() +  " \n";
 		    Files.write(Paths.get("history.log"), line.getBytes(), StandardOpenOption.APPEND);
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	static public void addCPULogLine(String line){
+		try {
+		    Files.write(Paths.get("CPUhistory.log"), line.getBytes(), StandardOpenOption.APPEND);
 		}catch (IOException e) {
 			e.printStackTrace();
 		}

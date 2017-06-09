@@ -1,6 +1,24 @@
-Program started
+Program initialized
+Generating new process file... at Clock: 0 
+New process file generated. at Clock: 0 
+User Clicked Start at Clock: 0 
 P1 admited! at Clock: 0 
 P2 admited! at Clock: 0 
 P3 admited! at Clock: 0 
+P3suspended due to lack of resource availability! at Clock: 0 
 P5 admited! at Clock: 0 
+P1is now beign executed by CPU2. at Clock: 0 
+P2is now beign executed by CPU3. at Clock: 0 
+P1is now beign executed by CPU2. at Clock: 2 
+P2is now beign executed by CPU3. at Clock: 2 
+P1is now beign executed by CPU2. at Clock: 4 
+P2is now beign executed by CPU3. at Clock: 4 
+P1 finished! at Clock: 5 
+P2 finished! at Clock: 5 
+P3is now beign executed by CPU2. at Clock: 5 
 P4 admited! at Clock: 6 
+P4suspended due to lack of resource availability! at Clock: 6 
+P3is now beign executed by CPU2. at Clock: 7 
+P3is now beign executed by CPU2. at Clock: 9 
+P5 finished! at Clock: 10 
+P3 finished! at Clock: 10 
